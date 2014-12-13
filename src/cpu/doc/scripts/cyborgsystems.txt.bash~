@@ -1,0 +1,10 @@
+#!/bin/bash
+#SOURCE=../doc/cyborgsystems.txt
+
+./milk-obelisk.bash | awk -F"|" '$1!=""' | awk -F"|" 'BEGIN {while(( getline <"laa-command.table") > 0 ) {split($0, arr,"|")}} { for(i=0;i<255;i++){if($1==arr[1]){print arr[2]"|", $0,"\n" }}}'
+
+# prints something like
+#| 7E | ROR|ROR - Rotate Right|Move each of the bits in either A or M one place to the right. Bit 7 is filled with the current value of the carry flag whilst the old bit 0 becomes the new carry flag value.|Processor Status after use:|C	Carry Flag	Set to contents of old bit 0|Z	Zero Flag	Set if A = 0|I	Interrupt Disable	Not affected|D	Decimal Mode Flag	Not affected|B	Break Command	Not affected|V	Overflow Flag	Not affected|N	Negative Flag	Set if bit 7 of the result is set|1|2|Zero Page	|$66|2|5|Zero Page,X	|$76|2|6|Absolute	|$6E|3|6|Absolute,X	|$7E|3|7||||||||||||||||||||||||||||||||||||||||||||| |
+
+#| 7E | ROR|ROR - Rotate Right|Move each of the bits in either A or M one place to the right. Bit 7 is filled with the current value of the carry flag whilst the old bit 0 becomes the new carry flag value.|Processor Status after use:|C	Carry Flag	Set to contents of old bit 0|Z	Zero Flag	Set if A = 0|I	Interrupt Disable	Not affected|D	Decimal Mode Flag	Not affected|B	Break Command	Not affected|V	Overflow Flag	Not affected|N	Negative Flag	Set if bit 7 of the result is set|1|2|Zero Page	|$66|2|5|Zero Page,X	|$76|2|6|Absolute	|$6E|3|6|Absolute,X	|$7E|3|7||||||||||||||||||||||||||||||||||||||||||||| |
+

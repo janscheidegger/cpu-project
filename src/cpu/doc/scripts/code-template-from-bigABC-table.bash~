@@ -1,0 +1,6 @@
+#!/bin/bash
+SOURCE=../opcode_table_bigABC
+
+awk -e '{ opcode = $1; oplength=$2; opcycle=$3; opmnomic=$4; opadrmode=$5; opadrmodeid=$6;  
+
+}'

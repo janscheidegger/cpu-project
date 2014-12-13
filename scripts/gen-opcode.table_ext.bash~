@@ -1,0 +1,14 @@
+#!/bin/bash
+# code table from 
+# http://visual6502.org/wiki/index.php?title=6502_all_256_Opcodes
+# produce c table with opid, bytes, cycles
+awk -e ' BEGIN { print "int ext_opcodetbl[] = {"
+               }
+        {
+#                opid, bytes, cycles
+        opid = $1
+        bytes = substring($0,29,1);
+        cycles = substring($0,39,1);
+        adrmode = ($3 == /[[:digit:]]/) ? "imp" : $3 
+        printf("{ %s, %s, %s, \"%s\" },\n", opid, bytes, cycles, adrmode)
+} 

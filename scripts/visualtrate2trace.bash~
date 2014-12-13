@@ -1,0 +1,3 @@
+ #!/bin/bash
+ 
+awk -e '{ print "PC  AC XR YR SP NV-BDIZC IR" }' < visual6502.org.disco.trace
