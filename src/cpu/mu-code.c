@@ -40,7 +40,6 @@ void cmp(char *rega, char *regb, char* flags){
     }else{
         clearCarryflag(flags);
     }
-
 }
 
 /*
