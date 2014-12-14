@@ -915,8 +915,14 @@ cycles: 2
 */
 void cpu_6502_ldx_imm(){
     cycles = 2;
+    cp_register(pcl, abrl);
+    cp_register(pch, abrh);
 
-   
+    set_rw2read();
+    access_memory();
+    
+    cp_register(dbr, ldx);
+    inc_pc();
 }
 
 
@@ -1078,7 +1084,14 @@ cycles: 2
 */
 void cpu_6502_ldy_imm(){
     cycles = 2;
+    cp_register(pcl, abrl);
+    cp_register(pch, abrh);
 
+    set_rw2read();
+    access_memory();
+    
+    cp_register(dbr, ldx);
+    inc_pc();
 }
 
 
@@ -2023,7 +2036,6 @@ cycles: 2
 */
 void cpu_6502_cmp_imm(){
     cycles = 2;
-
 }
 
 
