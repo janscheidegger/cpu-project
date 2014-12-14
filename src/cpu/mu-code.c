@@ -134,8 +134,17 @@ cycles: 2
 */
 void cpu_6502_bpl_rel(){
     cycles = 2;
-
+    if( getSignflag(flags) == '0' )
+    {
+        cp_register(pcl, abrl);
+        cp_register(pch, abrh);
+        set_rw2read();
+        access_memory();
+        alu(ALU_OP_ADD, pcl, dbr, pcl, flags);
+    }
+    inc_pc(); 
 }
+
 
 
 
@@ -151,7 +160,15 @@ cycles: 2
 */
 void cpu_6502_bmi_rel(){
     cycles = 2;
-
+    if( getSignflag(flags) == '1' )
+    {
+        cp_register(pcl, abrl);
+        cp_register(pch, abrh);
+        set_rw2read();
+        access_memory();
+        alu(ALU_OP_ADD, pcl, dbr, pcl, flags);
+    }
+    inc_pc(); 
 }
 
 
@@ -167,7 +184,15 @@ cycles: 2
 */
 void cpu_6502_bvc_rel(){
     cycles = 2;
-
+    if( getOverflowflag(flags) == '0' )
+    {
+        cp_register(pcl, abrl);
+        cp_register(pch, abrh);
+        set_rw2read();
+        access_memory();
+        alu(ALU_OP_ADD, pcl, dbr, pcl, flags);
+    }
+    inc_pc(); 
 }
 
 
@@ -183,7 +208,15 @@ cycles: 2
 */
 void cpu_6502_bvs_rel(){
     cycles = 2;
-
+    if( getOverflowflag(flags) == '1' )
+    {
+        cp_register(pcl, abrl);
+        cp_register(pch, abrh);
+        set_rw2read();
+        access_memory();
+        alu(ALU_OP_ADD, pcl, dbr, pcl, flags);
+    }
+    inc_pc(); 
 }
 
 
@@ -199,7 +232,15 @@ cycles: 2
 */
 void cpu_6502_bcc_rel(){
     cycles = 2;
-
+    if( getCarryflag(flags) == '0' )
+    {
+        cp_register(pcl, abrl);
+        cp_register(pch, abrh);
+        set_rw2read();
+        access_memory();
+        alu(ALU_OP_ADD, pcl, dbr, pcl, flags);
+    }
+    inc_pc(); 
 }
 
 
@@ -215,7 +256,15 @@ cycles: 2
 */
 void cpu_6502_bcs_rel(){
     cycles = 2;
-
+    if( getCarryflag(flags) == '1' )
+    {
+        cp_register(pcl, abrl);
+        cp_register(pch, abrh);
+        set_rw2read();
+        access_memory();
+        alu(ALU_OP_ADD, pcl, dbr, pcl, flags);
+    }
+    inc_pc(); 
 }
 
 /*
@@ -230,7 +279,6 @@ cycles: 2
 */
 void cpu_6502_bne_rel(){
     cycles = 2;
-    //TODO: Check for validity
     if (getZeroflag(flags) == '0')
     {  
         cp_register(pcl, abrl);
@@ -255,7 +303,15 @@ cycles: 2
 */
 void cpu_6502_beq_rel(){
     cycles = 2;
-
+    if (getZeroflag(flags) == '1')
+    {  
+        cp_register(pcl, abrl);
+        cp_register(pch, abrh);
+        set_rw2read();
+        access_memory();
+        alu(ALU_OP_ADD, pcl, dbr, pcl, flags);
+    }
+    inc_pc(); 
 }
 
 
