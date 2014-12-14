@@ -2036,6 +2036,17 @@ cycles: 2
 */
 void cpu_6502_cmp_imm(){
     cycles = 2;
+    cp_register(pcl, abrl);
+    cp_register(pch, abrh);
+
+    set_rw2read();
+    access_memory();
+
+    alu(ALU_OP_SUB,acc,dbr,acc,flags);
+    inc_pc();
+
+
+
 }
 
 
