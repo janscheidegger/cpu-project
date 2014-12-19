@@ -721,6 +721,31 @@ cycles: 4
 */
 void cpu_6502_lda_abx (){
     cycles = 4;
+    char localflags[] = "00000000";
+    char low[] = "00000000";
+    cp_register(pcl, abrl);
+    cp_register(pch, abrh);
+
+    set_rw2read();
+    access_memory();
+    
+    cp_register(dbr, low);
+
+    inc_pc();
+    cp_register(pcl, abrl);
+    cp_register(pch, abrh);
+
+    set_rw2read();
+    access_memory();
+
+    alu(ALU_OP_ADD,low,idx,abrl,localflags);
+    alu(ALU_OP_ADD_WITH_CARRY,dbr,"00000000",abrh,localflags);
+    
+    set_rw2read();
+    access_memory();
+
+    cp_register(dbr, idx);
+    inc_pc();
 
 }
 
