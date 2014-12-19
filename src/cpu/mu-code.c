@@ -689,7 +689,38 @@ cycles: 5
 */
 void cpu_6502_lda_izy(){
     cycles = 5;
+    char low[] = "00000000";
+    char high[] = "0000000";
+    char localflags[] = "00000000";
 
+    cp_register(pcl, abrl);
+    cp_register(zero, abrh);
+
+    set_rw2read();
+    access_memory();
+
+    cp_register(dbr, low);
+
+    alu(ALU_OP_ADD,abrl, one, abrl, zero);
+
+    set_rw2read();
+    access_memory();
+
+    cp_register(dbr, high);
+
+    alu(ALU_OP_ADD,low,idx,low,localflags);
+    alu(ALU_OP_ADD_WITH_CARRY,high,zero,high,localflags);
+
+    cp_register(low, abrl);
+    cp_register(high, abrh);
+
+    set_rw2read();
+    access_memory();
+
+    cp_register(dbr, acc);
+    zsflagging(flags, acc);
+ 
+    inc_pc();
 }
 
 
@@ -744,9 +775,10 @@ void cpu_6502_lda_abx (){
     set_rw2read();
     access_memory();
 
-    cp_register(dbr, idx);
-    inc_pc();
+    cp_register(dbr, acc);
+    zsflagging(flags,acc);
 
+    inc_pc();
 }
 
 
