@@ -695,23 +695,24 @@ void cpu_6502_lda_izx(){
     char high[] = "00000000";
     char localflags[] = "00000000";
 
-    cp_register(pcl, low);
-    cp_register(zero, abrh);
-    alu(ALU_OP_ADD, low, idx, abrl, zero);
+    cp_register(pcl, abrl);
+    cp_register(pch, abrh);
 
     set_rw2read();
     access_memory();
 
     cp_register(dbr, low);
-    
-    alu(ALU_OP_ADD, abrl, one, abrl, localflags);
+
+    alu(ALU_OP_ADD, abrl, idx, abrl, localflags);
     alu(ALU_OP_ADD_WITH_CARRY, abrh, zero, abrh, localflags);
 
     set_rw2read();
     access_memory();
 
+    cp_register(dbr, high);
+    
     cp_register(low, abrl);
-    cp_register(dbr, abrh);
+    cp_register(high, abrh);
 
     set_rw2read();
     access_memory();
@@ -740,33 +741,31 @@ void cpu_6502_lda_izy(){
     char localflags[] = "00000000";
 
     cp_register(pcl, abrl);
-    cp_register(zero, abrh);
-
+    cp_register(pch, abrh);
     set_rw2read();
     access_memory();
-
+    cp_register(dbr, low);
+    
+    cp_register(abrl, low);
+    cp_register(abrh, zero);
+    set_rw2read();
+    access_memory();
     cp_register(dbr, low);
 
-    alu(ALU_OP_ADD,abrl, one, abrl, zero);
-
+    alu(ALU_OP_ADD, abrl, one, abrl, "00000000");
     set_rw2read();
     access_memory();
-
     cp_register(dbr, high);
 
-    alu(ALU_OP_ADD,low,idx,low,localflags);
-    alu(ALU_OP_ADD_WITH_CARRY,high,zero,high,localflags);
-
-    cp_register(low, abrl);
-    cp_register(high, abrh);
-
+    alu(ALU_OP_ADD, low, idy, abrl, localflags);
+    alu(ALU_OP_ADD_WITH_CARRY, high, zero, abrh, localflags);
     set_rw2read();
     access_memory();
-
     cp_register(dbr, acc);
     zsflagging(flags, acc);
- 
+
     inc_pc();
+
 }
 
 
