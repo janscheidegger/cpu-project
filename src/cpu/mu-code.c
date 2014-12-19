@@ -391,7 +391,10 @@ cycles: 6
 */
 void cpu_6502_rts_imp(){
     cycles = 6;
-
+    char localflags[] = "00000000";
+    pop1(pch);
+    pop1(pcl);
+    inc_pc();
 }
 
 
