@@ -908,6 +908,19 @@ cycles: 3
 */
 void cpu_6502_sta_zp(){
     cycles = 3;
+    cp_register(pcl, abrl);
+    cp_register(pch, abrh);
+    set_rw2read();
+    access_memory();
+    
+    cp_register(dbr, abrl);
+    cp_register(zero, abrh);
+
+    cp_register(acc, dbr);
+    set_rw2write();
+    access_memory();
+
+    inc_pc();
 
 }
 
