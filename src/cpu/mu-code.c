@@ -979,7 +979,7 @@ void cpu_6502_sta_izx(){
     cp_register(dbr, abrl);
 
     alu(ALU_OP_ADD, abrl, idx, abrl, "0000000");
-    cp_register(zero, abrh)
+    cp_register(zero, abrh);
     set_rw2read();
     access_memory();
     cp_register(dbr, low);
