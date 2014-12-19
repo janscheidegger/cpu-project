@@ -667,7 +667,7 @@ void cpu_6502_lda_zpx (){
     cp_register(dbr, abrl);
     cp_register(zero, abrh);
 
-    alu(ALU_OP_ADD, abrl, one, abrl, "00000000");
+    alu(ALU_OP_ADD, abrl, idx, abrl, "00000000");
 
     set_rw2read();
     access_memory();
@@ -938,6 +938,21 @@ cycles: 4
 void cpu_6502_sta_zpx (){
     cycles = 4;
 
+    cp_register(pcl, abrl);
+    cp_register(pch, abrh);
+    set_rw2read();
+    access_memory();
+
+    cp_register(dbr, abrl);
+    cp_register(zero, abrh);
+
+    alu(ALU_OP_ADD, abrl, idx, abrl, "00000000");
+    cp_register(acc, dbr);
+
+    set_rw2write();
+    access_memory();
+    
+    inc_pc();
 }
 
 
