@@ -556,6 +556,7 @@ void cpu_6502_bit_abs(){
         clearZeroflag(flags);
     }
     inc_pc();
+    //TODO SEToverlfow, set signflag
 }
 
 
