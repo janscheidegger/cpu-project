@@ -1333,6 +1333,9 @@ cycles: 4
 */
 void cpu_6502_ldx_aby(){
     cycles = 4;
+    char *reg = edata_abindex(ixy);
+    cp_register(reg, idy);
+    // zsflagging??
 
 }
 
