@@ -441,6 +441,35 @@ cycles: 5
 void cpu_6502_jmp_ind(){
     cycles = 5;
 
+    char low[] = "00000000";
+    char high[] = "00000000";
+    
+    cp_register(pcl, abrl);
+    cp_register(pch, abrh);
+    set_rw2read();
+    access_memory();
+    cp_register(dbr, low);
+
+    inc_pc(); 
+    cp_register(pcl, abrl);
+    cp_register(pch, abrh);
+    set_rw2read();
+    access_memory();
+    cp_register(dbr, high);
+
+    cp_register(low, abrl);
+    cp_register(high, abrh);
+    set_rw2read();
+    access_memory();
+    cp_register(dbr, pcl);
+
+    alu(ALU_OP_ADD, low, one, low, "00000000");
+    cp_register(low, abrl);
+    cp_register(high, abrh);
+    set_rw2read();
+    access_memory();
+    cp_register(dbr, pch);
+    
 }
 
 
@@ -456,7 +485,29 @@ cycles: 3
 */
 void cpu_6502_bit_zp(){
     cycles = 3;
+    char localflags[] = "00000000";
+    char temp[] = "00000000";
 
+    cp_register(pcl, abrl);
+    cp_register(pch, abrh);
+    set_rw2read();
+    access_memory();
+    cp_register(dbr, pcl);
+    cp_register(zero, pch);
+    set_rw2read();
+    access_memory();
+
+
+    alu(ALU_OP_AND, dbr, acc, temp, localflags);
+
+    if(localflags[2] == '1') {
+        setZeroflag(flags);
+    }
+    else {
+        clearZeroflag(flags);
+    }
+    inc_pc();
+    //TODO SET Overflowflag set Signflag
 }
 
 
@@ -472,7 +523,39 @@ cycles: 4
 */
 void cpu_6502_bit_abs(){
     cycles = 4;
+    char localflags[] = "00000000";
+    char temp[] = "00000000";
+    char low[] = "00000000";
+    char high[] = "00000000";
 
+    cp_register(pcl, abrl);
+    cp_register(pch, abrh);
+    set_rw2read();
+    access_memory();
+    cp_register(dbr, low);
+
+    inc_pc();
+
+    cp_register(pcl, abrl);
+    cp_register(pch, abrh);
+    set_rw2read();
+    access_memory();
+    cp_register(dbr, high);
+
+    cp_register(low, abrl);
+    cp_register(high, abrh);
+    set_rw2read();
+    access_memory();
+
+    alu(ALU_OP_AND, dbr, acc, temp, localflags);
+
+    if(localflags[2] == '1') {
+        setZeroflag(flags);
+    }
+    else {
+        clearZeroflag(flags);
+    }
+    inc_pc();
 }
 
 
