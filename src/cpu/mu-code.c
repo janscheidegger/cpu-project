@@ -921,7 +921,7 @@ void cpu_6502_ldx_imm(){
     set_rw2read();
     access_memory();
     
-    cp_register(dbr, ldx);
+    cp_register(dbr, idx);
     inc_pc();
 }
 
@@ -1090,7 +1090,7 @@ void cpu_6502_ldy_imm(){
     set_rw2read();
     access_memory();
     
-    cp_register(dbr, ldx);
+    cp_register(dbr, idy);
     inc_pc();
 }
 
