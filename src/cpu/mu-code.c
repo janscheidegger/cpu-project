@@ -673,7 +673,35 @@ cycles: 6
 */
 void cpu_6502_lda_izx(){
     cycles = 6;
+    char low[] = "00000000";
+    char high[] = "00000000";
+    char localflags[] = "00000000";
 
+    cp_register(pcl, low);
+    cp_register(zero, abrh);
+    alu(ALU_OP_ADD, low, idx, abrl, zero);
+
+    set_rw2read();
+    access_memory();
+
+    cp_register(dbr, low);
+    
+    alu(ALU_OP_ADD, abrl, one, abrl, localflags);
+    alu(ALU_OP_ADD_WITH_CARRY, abrh, zero, abrh, localflags);
+
+    set_rw2read();
+    access_memory();
+
+    cp_register(low, abrl);
+    cp_register(dbr, abrh);
+
+    set_rw2read();
+    access_memory();
+
+    cp_register(dbr, acc);
+    zsflagging(flags, acc);
+
+    inc_pc();
 }
 
 
