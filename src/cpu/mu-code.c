@@ -360,8 +360,22 @@ cycles: 6
 */
 void cpu_6502_jsr_abs(){
     cycles = 6;
-    //TODO Push on Stack!
-    cpu_6502_jmp_abs();
+
+    cp_register(pcl, abrl);
+    cp_register(pch, abrh);
+    set_rw2read();
+    access_memory();
+
+    inc_pc();
+    push1(pcl);
+    push1(pch);
+
+    cp_register(pcl, abrl);
+    cp_register(pch, abrh);
+    cp_register(dbr, pcl);
+    set_rw2read();
+    access_memory();
+    cp_register(dbr, pch);
 }
 
 
