@@ -968,6 +968,35 @@ cycles: 6
 */
 void cpu_6502_sta_izx(){
     cycles = 6;
+    char low[] = "00000000";
+    char high[] = "00000000";
+    char localflags[] = "00000000";
+
+    cp_register(pcl, abrl);
+    cp_register(pch, abrh);
+    set_rw2read();
+    access_memory();
+
+    cp_register(dbr, low);
+
+    alu(ALU_OP_ADD, abrl, idx, abrl, localflags);
+    alu(ALU_OP_ADD_WITH_CARRY, abrh, zero, abrh, localflags);
+    set_rw2read();
+    access_memory();
+
+    cp_register(dbr, high);
+    cp_register(low, abrl);
+    cp_register(high, abrh);
+
+
+    cp_register(acc, dbr);
+    set_rw2write();
+    access_memory();
+
+    inc_pc();
+
+    
+
 
 }
 
