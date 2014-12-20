@@ -1332,7 +1332,6 @@ cycles: 4
 */
 void cpu_6502_ldx_zpy(){
     cycles = 4;
-    char zero[]="00000000";
     char localflags[]="00000000";
     cp_register(pcl, abrl);
     cp_register(pch, abrh);
@@ -1402,7 +1401,18 @@ cycles: 3
 */
 void cpu_6502_stx_zp(){
     cycles = 3;
+    cp_register(pcl, abrl);
+    cp_register(pch, abrh);
+    set_rw2read();
+    access_memory();
 
+    cp_register(dbr, abrl);
+    cp_register(zero, abrh);
+    cp_register(idx, dbr);
+    set_rw2write();
+    access_memory();
+
+    inc_pc();
 }
 
 
@@ -1418,6 +1428,21 @@ cycles: 4
 */
 void cpu_6502_stx_zpy(){
     cycles = 4;
+    cp_register(pcl, abrl);
+    cp_register(pch, abrh);
+
+    set_rw2read();
+    access_memory();
+
+    alu(ALU_OP_ADD, dbr, idy, dbr, "00000000");
+    cp_register(dbr, abrl);
+    cp_register(zero, abrh);
+    cp_register(acc, dbr);
+
+    set_rw2write();
+    access_memory();
+
+    inc_pc();
 
 }
 
@@ -1434,6 +1459,30 @@ cycles: 4
 */
 void cpu_6502_stx_abs(){
     cycles = 4;
+    char low[] = "00000000";
+    char high[] = "00000000";
+
+    cp_register(pcl, abrl);
+    cp_register(pch, abrh);
+    set_rw2read();
+    access_memory();
+    cp_register(dbr, low);
+
+    inc_pc();
+
+    cp_register(pcl, abrl);
+    cp_register(pch, abrh);
+    set_rw2read();
+    access_memory();
+    cp_register(dbr, high);
+
+    cp_register(low, abrl);
+    cp_register(high, abrh);
+    cp_register(idx, dbr);
+    set_rw2write();
+    access_memory();
+
+    inc_pc();
 
 }
 
