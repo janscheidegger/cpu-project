@@ -1301,7 +1301,6 @@ cycles: 3
 */
 void cpu_6502_ldx_zp(){
     cycles = 3;
-    char zero[]="00000000";
     cp_register(pcl, abrl);
     cp_register(pch, abrh);
 
@@ -1383,9 +1382,8 @@ cycles: 4
 void cpu_6502_ldx_aby(){
     cycles = 4;
     char *reg = edata_abindex(idy);
-    cp_register(reg, idy);
-    // zsflagging??
-
+    cp_register(reg, idx);
+    zsflagging(flags, idx);
 }
 
 
@@ -1437,7 +1435,7 @@ void cpu_6502_stx_zpy(){
     alu(ALU_OP_ADD, dbr, idy, dbr, "00000000");
     cp_register(dbr, abrl);
     cp_register(zero, abrh);
-    cp_register(acc, dbr);
+    cp_register(idx, dbr);
 
     set_rw2write();
     access_memory();
@@ -1522,6 +1520,21 @@ cycles: 3
 */
 void cpu_6502_ldy_zp(){
     cycles = 3;
+    cp_register(pcl, abrl);
+    cp_register(pch, abrh);
+
+    set_rw2read();
+    access_memory();
+
+    cp_register(dbr, abrl);
+    cp_register(zero, abrh);
+
+    set_rw2read();
+    access_memory();
+
+    cp_register(dbr, idy);
+    zsflagging(flags,idy);
+    inc_pc();
 
 }
 
@@ -1538,6 +1551,23 @@ cycles: 4
 */
 void cpu_6502_ldy_zpx (){
     cycles = 4;
+    char localflags[]="00000000";
+    cp_register(pcl, abrl);
+    cp_register(pch, abrh);
+
+    set_rw2read();
+    access_memory();
+
+    alu(ALU_OP_ADD, dbr, idx, dbr, localflags);
+    cp_register(dbr, abrl);
+    cp_register(zero, abrh);
+
+    set_rw2read();
+    access_memory();
+
+    cp_register(dbr, idy);
+    zsflagging(flags,idy);
+    inc_pc();
 
 }
 
@@ -1554,6 +1584,9 @@ cycles: 4
 */
 void cpu_6502_ldy_abs(){
     cycles = 4;
+    char *reg = edata_abs();
+    cp_register(reg,idx);
+    zsflagging(flags,idx);
 
 }
 
@@ -1571,7 +1604,9 @@ cycles: 4
 */
 void cpu_6502_ldy_abx (){
     cycles = 4;
-
+    char *reg = edata_abindex(idy);
+    cp_register(reg, idy);
+    zsflagging(flags, idy);
 }
 
 
@@ -1620,6 +1655,23 @@ cycles: 4
 void cpu_6502_sty_zpx (){
     cycles = 4;
 
+    cp_register(pcl, abrl);
+    cp_register(pch, abrh);
+
+    set_rw2read();
+    access_memory();
+
+    alu(ALU_OP_ADD, dbr, idx, dbr, "00000000");
+    cp_register(dbr, abrl);
+    cp_register(zero, abrh);
+    cp_register(idy, dbr);
+
+    set_rw2write();
+    access_memory();
+
+    inc_pc();
+
+
 }
 
 
@@ -1635,7 +1687,30 @@ cycles: 4
 */
 void cpu_6502_sty_abs(){
     cycles = 4;
+    char low[] = "00000000";
+    char high[] = "00000000";
 
+    cp_register(pcl, abrl);
+    cp_register(pch, abrh);
+    set_rw2read();
+    access_memory();
+    cp_register(dbr, low);
+
+    inc_pc();
+
+    cp_register(pcl, abrl);
+    cp_register(pch, abrh);
+    set_rw2read();
+    access_memory();
+    cp_register(dbr, high);
+
+    cp_register(low, abrl);
+    cp_register(high, abrh);
+    cp_register(idy, dbr);
+    set_rw2write();
+    access_memory();
+
+    inc_pc();
 }
 
 
@@ -1651,6 +1726,7 @@ cycles: 2
 */
 void cpu_6502_tax_imp(){
     cycles = 2;
+    cp_register(acc, idx);
 
 }
 
@@ -1684,6 +1760,7 @@ cycles: 2
 */
 void cpu_6502_tay_imp(){
     cycles = 2;
+    cp_register(acc, idy);
 
 }
 
@@ -1717,7 +1794,7 @@ cycles: 2
 */
 void cpu_6502_tsx_imp(){
     cycles = 2;
-
+    cp_register(sp, idx);
 }
 
 
@@ -1733,7 +1810,7 @@ cycles: 2
 */
 void cpu_6502_txs_imp(){
     cycles = 2;
-
+    cp_register(idx, sp);
 }
 
 
@@ -1749,7 +1826,7 @@ cycles: 4
 */
 void cpu_6502_pla_imp(){
     cycles = 4;
-
+    pop1(acc);
 }
 
 
@@ -1765,7 +1842,7 @@ cycles: 3
 */
 void cpu_6502_pha_imp(){
     cycles = 3;
-
+    push1(acc);
 }
 
 
@@ -1812,6 +1889,19 @@ cycles: 2
 */
 void cpu_6502_ora_imm(){
     cycles = 2;
+    //char temp[] = "00000000";
+    char localflags = "00000000";
+
+    cp_register(pcl, abrl);
+    cp_register(pch, abrh); 
+    set_rw2read();
+    access_memory();
+
+    alu(ALU_OP_OR, dbr, acc, acc, localflags);
+
+    zsflagging(flags, acc);
+    
+
 
 }
 
@@ -1828,7 +1918,22 @@ cycles: 3
 */
 void cpu_6502_ora_zp(){
     cycles = 3;
+    char localflags[] = "00000000";
 
+    cp_register(pcl, abrl);
+    cp_register(pch, abrh);
+    set_rw2read();
+    access_memory();
+
+    cp_register(dbr, abrl);
+    cp_register(zero, abrh);
+    set_rw2read();
+    access_memory();
+
+    alu(ALU_OP_OR, dbr, acc, acc, localflags);
+
+    zsflagging(flags, acc);
+    inc_pc();
 }
 
 
