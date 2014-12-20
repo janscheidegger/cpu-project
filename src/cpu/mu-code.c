@@ -1114,10 +1114,36 @@ cycles: 6
 */
 void cpu_6502_sta_izy(){
     cycles = 6;
+    char low[] = "00000000";
+    char high[] = "0000000";
+    char localflags[] = "00000000";
 
+    cp_register(pcl, abrl);
+    cp_register(pch, abrh);
+    set_rw2read();
+    access_memory();
+    cp_register(dbr, low);
+    
+    cp_register(low, abrl);
+    cp_register(zero, abrh);
+    set_rw2read();
+    access_memory();
+    cp_register(dbr, low);
+
+    alu(ALU_OP_ADD, abrl, one, abrl, "00000000");
+    set_rw2read();
+    access_memory();
+    cp_register(dbr, high);
+
+    alu(ALU_OP_ADD, low, idy, abrl, localflags);
+    alu(ALU_OP_ADD_WITH_CARRY, high, zero, abrh, localflags);
+
+    cp_register(acc, dbr);
+    set_rw2write();
+    access_memory();
+
+    inc_pc();
 }
-
-
 /*
    6502 mu-function implementation ( file:///home/olivier/6502.html#STA )
 name: STA
@@ -1130,6 +1156,30 @@ cycles: 4
 */
 void cpu_6502_sta_abs(){
     cycles = 4;
+    char low[] = "00000000";
+    char high[] = "00000000";
+
+    cp_register(pcl, abrl);
+    cp_register(pch, abrh);
+    set_rw2read();
+    access_memory();
+    cp_register(dbr, low);
+
+    inc_pc();
+    cp_register(pcl, abrl);
+    cp_register(pch, abrh);
+    set_rw2read();
+    access_memory();
+    cp_register(dbr, high);
+
+    cp_register(low, abrl);
+    cp_register(high, abrh);
+    cp_register(acc, dbr);
+    set_rw2write();
+    access_memory();
+
+    inc_pc();
+
 
 }
 
@@ -1333,7 +1383,7 @@ cycles: 4
 */
 void cpu_6502_ldx_aby(){
     cycles = 4;
-    char *reg = edata_abindex(ixy);
+    char *reg = edata_abindex(idy);
     cp_register(reg, idy);
     // zsflagging??
 
