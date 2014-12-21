@@ -795,20 +795,25 @@ void cpu_6502_lda_izx(){
     char low[] = "00000000";
     char high[] = "00000000";
     char localflags[] = "00000000";
+    char zeroaddr[] = "00000000";
 
     cp_register(pcl, abrl);
     cp_register(pch, abrh);
     set_rw2read();
     access_memory();
-    cp_register(dbr, abrl);
+    cp_register(dbr, zeroaddr);
 
-    alu(ALU_OP_ADD, abrl, idx, abrl, "00000000");
+    alu(ALU_OP_ADD, zeroaddr, idx, zeroaddr, localflags);
+    cp_register(zeroaddr, abrl);
     cp_register(zero, abrh);
     set_rw2read();
     access_memory();
     cp_register(dbr, low);
 
-    alu(ALU_OP_ADD, abrl, one, abrl, "00000000");
+    inc_register(zeroaddr);
+
+    cp_register(zeroaddr, abrl);
+    cp_register(zero, abrh);
     set_rw2read();
     access_memory();
     cp_register(dbr, high);
@@ -1079,13 +1084,13 @@ void cpu_6502_sta_izx(){
     access_memory();
     cp_register(dbr, abrl);
 
-    alu(ALU_OP_ADD, abrl, idx, abrl, "0000000");
+    alu(ALU_OP_ADD, abrl, idx, abrl, localflags);
     cp_register(zero, abrh);
     set_rw2read();
     access_memory();
     cp_register(dbr, low);
 
-    alu(ALU_OP_ADD, abrl, one, abrl, "00000000");
+    inc_register(abrl);
     set_rw2read();
     access_memory();
     cp_register(dbr, high);
@@ -1114,35 +1119,40 @@ cycles: 6
 */
 void cpu_6502_sta_izy(){
     cycles = 6;
-    char low[] = "00000000";
-    char high[] = "0000000";
-    char localflags[] = "00000000";
+
+    char zeroaddr[]="00000000";
+    char low[]="00000000";
+    char zero[]="00000000";
+    char localflags[]="00000000";
 
     cp_register(pcl, abrl);
     cp_register(pch, abrh);
     set_rw2read();
     access_memory();
-    cp_register(dbr, low);
-    
-    cp_register(low, abrl);
+    cp_register(dbr, zeroaddr);
+
+    inc_pc();
+
+    cp_register(zeroaddr, abrl);
     cp_register(zero, abrh);
     set_rw2read();
     access_memory();
-    cp_register(dbr, low);
+    cp_register(dbr,low);
 
-    alu(ALU_OP_ADD, abrl, one, abrl, "00000000");
+    inc_register(zeroaddr);
+
+    cp_register(zeroaddr, abrl);
+    cp_register(zero, abrh);
     set_rw2read();
     access_memory();
-    cp_register(dbr, high);
 
-    alu(ALU_OP_ADD, low, idy, abrl, localflags);
-    alu(ALU_OP_ADD_WITH_CARRY, high, zero, abrh, localflags);
+    alu(ALU_OP_ADD,low,idy,low,localflags);
+    alu(ALU_OP_ADD_WITH_CARRY,dbr,"00000000",abrh,localflags);
+    cp_register(low,abrl);
 
     cp_register(acc, dbr);
     set_rw2write();
     access_memory();
-
-    inc_pc();
 }
 /*
    6502 mu-function implementation ( file:///home/olivier/6502.html#STA )
@@ -2910,6 +2920,21 @@ cycles: 5
 */
 void cpu_6502_inc_zp(){
     cycles = 5;
+    cp_register(pcl, abrl);
+    cp_register(pch, abrh);
+    set_rw2read();
+    access_memory();
+
+    cp_register(dbr, abrl);
+    cp_register(zero, abrh);
+    set_rw2read();
+    access_memory();
+
+    inc_register(dbr);
+    set_rw2write();
+    access_memory();
+
+    inc_pc();
 
 }
 
