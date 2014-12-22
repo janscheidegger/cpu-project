@@ -2262,6 +2262,12 @@ cycles: 2
 */
 void cpu_6502_eor_imm(){
     cycles = 2;
+    char localflags[] = "00000000";
+
+    char *dbr = edata_imm();
+    alu(ALU_OP_XOR, dbr, acc, acc, localflags);
+
+    zsflagging(flags, acc);
 
 }
 
@@ -2278,6 +2284,13 @@ cycles: 3
 */
 void cpu_6502_eor_zp(){
     cycles = 3;
+    char localflags[] = "00000000";
+
+    char *dbr = edata_zp();
+    alu(ALU_OP_XOR, dbr, acc, acc, localflags);
+
+    zsflagging(flags, acc);
+   
 }
 
 
@@ -2293,6 +2306,12 @@ cycles: 4
 */
 void cpu_6502_eor_zpx (){
     cycles = 4;
+    char localflags[] = "00000000";
+
+    char *dbr = edata_zpindex(idx);
+    alu(ALU_OP_XOR, dbr, acc, acc, localflags);
+
+    zsflagging(flags, acc);
 
 }
 
@@ -2309,6 +2328,12 @@ cycles: 6
 */
 void cpu_6502_eor_izx(){
     cycles = 6;
+    char localflags[] = "00000000";
+
+    char *dbr = edata_izx();
+    alu(ALU_OP_XOR, dbr, acc, acc, localflags);
+
+    zsflagging(flags, acc);
 
 }
 
@@ -2325,6 +2350,12 @@ cycles: 5
 */
 void cpu_6502_eor_izy(){
     cycles = 5;
+    char localflags[] = "00000000";
+
+    char *dbr = edata_izy();
+    alu(ALU_OP_XOR, dbr, acc, acc, localflags);
+
+    zsflagging(flags, acc);
 
 }
 
@@ -2341,6 +2372,12 @@ cycles: 4
 */
 void cpu_6502_eor_abs(){
     cycles = 4;
+    char localflags[] = "00000000";
+
+    char *dbr = edata_abs();
+    alu(ALU_OP_XOR, dbr, acc, acc, localflags);
+
+    zsflagging(flags, acc);
 
 }
 
@@ -2357,6 +2394,12 @@ cycles: 4
 */
 void cpu_6502_eor_abx (){
     cycles = 4;
+    char localflags[] = "00000000";
+
+    char *dbr = edata_abindex(idx);
+    alu(ALU_OP_XOR, dbr, acc, acc, localflags);
+
+    zsflagging(flags, acc);
 
 }
 
@@ -2373,6 +2416,12 @@ cycles: 4
 */
 void cpu_6502_eor_aby(){
     cycles = 4;
+    char localflags[] = "00000000";
+
+    char *dbr = edata_abindex(idy);
+    alu(ALU_OP_XOR, dbr, acc, acc, localflags);
+
+    zsflagging(flags, acc);
 
 }
 
@@ -2389,7 +2438,14 @@ cycles: 2
 */
 void cpu_6502_adc_imm(){
     cycles = 2;
-
+    cp_register(pcl, abrl);
+    cp_register(pch, abrh);
+    set_rw2read();
+    access_memory();
+    
+    alu(ALU_OP_ADD_WITH_CARRY, acc, dbr, acc, flags);
+    inc_pc();
+    zsflagging(flags, acc);
 }
 
 
@@ -2405,6 +2461,19 @@ cycles: 3
 */
 void cpu_6502_adc_zp(){
     cycles = 3;
+    cp_register(pcl, abrl);
+    cp_register(pch, abrh);
+    set_rw2read();
+    access_memory();
+
+    cp_register(dbr, abrl);
+    cp_register(zero, abrh);
+    set_rw2read();
+    access_memory();
+
+    alu(ALU_OP_ADD_WITH_CARRY, acc, dbr, acc, flags);
+    inc_pc();
+    zsflagging(flags, acc);
 
 }
 
@@ -2421,6 +2490,22 @@ cycles: 4
 */
 void cpu_6502_adc_zpx (){
     cycles = 4;
+    char localflags[] = "00000000";
+
+    cp_register(pcl, abrl);
+    cp_register(pch, abrh);
+    set_rw2read();
+    access_memory();
+
+    cp_register(dbr, abrl);
+    alu(ALU_OP_ADD, abrl, idx, abrl, localflags);
+    cp_register(zero, abrh);
+    set_rw2read();
+    access_memory();
+
+    alu(ALU_OP_ADD_WITH_CARRY, acc, dbr, acc, flags);
+    inc_pc();
+    zsflagging(flags, acc);
 
 }
 
@@ -2437,7 +2522,39 @@ cycles: 6
 */
 void cpu_6502_adc_izx(){
     cycles = 6;
+    char localflags[] = "00000000";
+    char low[] = "00000000";
+    char high[] = "00000000";
 
+    cp_register(pcl, abrl);
+    cp_register(pch, abrh);
+    set_rw2read();
+    access_memory();
+
+    alu(ALU_OP_ADD, dbr, idx, dbr, localflags);
+    cp_register(dbr, abrl);
+    cp_register(zero, abrh);
+    set_rw2read();
+    access_memory();
+
+    cp_register(dbr, low);
+
+    inc_register(dbr);
+    cp_register(dbr, abrl);
+    cp_register(zero, abrh);
+    set_rw2read();
+    access_memory();
+    cp_register(dbr, high);
+
+    cp_register(low, abrl);
+    cp_register(high, abrh);
+
+    set_rw2read();
+    access_memory();
+
+    alu(ALU_OP_ADD_WITH_CARRY, acc, dbr, acc, flags);
+    inc_pc();
+    zsflagging(flags, acc);
 }
 
 
@@ -2653,9 +2770,6 @@ void cpu_6502_cmp_imm(){
 
     alu(ALU_OP_SUB,acc,dbr,acc,flags);
     inc_pc();
-
-
-
 }
 
 
@@ -2688,7 +2802,6 @@ void cpu_6502_cmp_zp(){
 
     alu(ALU_OP_SUB,acc,dbr,acc,flags);
     inc_pc();
-
 }
 
 
