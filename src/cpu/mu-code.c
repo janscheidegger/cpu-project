@@ -361,10 +361,13 @@ cycles: 6
 void cpu_6502_jsr_abs(){
     cycles = 6;
 
+    char low[] = "00000000";
+
     cp_register(pcl, abrl);
     cp_register(pch, abrh);
     set_rw2read();
     access_memory();
+    cp_register(dbr, low);
 
     inc_pc();
     push1(pcl);
@@ -372,9 +375,10 @@ void cpu_6502_jsr_abs(){
 
     cp_register(pcl, abrl);
     cp_register(pch, abrh);
-    cp_register(dbr, pcl);
     set_rw2read();
     access_memory();
+
+    cp_register(low, pcl);
     cp_register(dbr, pch);
 }
 
@@ -858,7 +862,7 @@ void cpu_6502_lda_izy(){
     access_memory();
     cp_register(dbr, low);
 
-    alu(ALU_OP_ADD, abrl, one, abrl, "00000000");
+    alu(ALU_OP_ADD, abrl, one, abrl, NULL);
     set_rw2read();
     access_memory();
     cp_register(dbr, high);
