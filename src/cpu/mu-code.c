@@ -1900,7 +1900,7 @@ cycles: 2
 void cpu_6502_ora_imm(){
     cycles = 2;
     //char temp[] = "00000000";
-    char localflags = "00000000";
+    char localflags[] = "00000000";
 
     cp_register(pcl, abrl);
     cp_register(pch, abrh); 
@@ -1959,7 +1959,12 @@ cycles: 4
 */
 void cpu_6502_ora_zpx (){
     cycles = 4;
+    char localflags[] = "00000000";
 
+    char *dbr = edata_zpindex(idx);
+    alu(ALU_OP_OR, dbr, acc, acc, localflags);
+
+    zsflagging(flags, acc);
 }
 
 
@@ -1975,6 +1980,12 @@ cycles: 6
 */
 void cpu_6502_ora_izx(){
     cycles = 6;
+    char localflags[] = "00000000";
+
+    char *dbr = edata_izx();
+    alu(ALU_OP_OR, dbr, acc, acc, localflags);
+
+    zsflagging(flags, acc);
 
 }
 
@@ -1991,7 +2002,12 @@ cycles: 5
 */
 void cpu_6502_ora_izy(){
     cycles = 5;
+    char localflags[] = "00000000";
 
+    char *dbr = edata_izy();
+    alu(ALU_OP_OR, dbr, acc, acc, localflags);
+
+    zsflagging(flags, acc);
 }
 
 
@@ -2007,7 +2023,12 @@ cycles: 4
 */
 void cpu_6502_ora_abs(){
     cycles = 4;
+    char localflags[] = "00000000";
 
+    char *dbr = edata_abs();
+    alu(ALU_OP_OR, dbr, acc, acc, localflags);
+
+    zsflagging(flags, acc);
 }
 
 
@@ -2023,7 +2044,12 @@ cycles: 4
 */
 void cpu_6502_ora_abx (){
     cycles = 4;
+    char localflags[] = "00000000";
 
+    char *dbr = edata_abindex(idx);
+    alu(ALU_OP_OR, dbr, acc, acc, localflags);
+
+    zsflagging(flags, acc);
 }
 
 
@@ -2039,7 +2065,12 @@ cycles: 4
 */
 void cpu_6502_ora_aby(){
     cycles = 4;
+    char localflags[] = "00000000";
 
+    char *dbr = edata_abindex(idy);
+    alu(ALU_OP_OR, dbr, acc, acc, localflags);
+
+    zsflagging(flags, acc);
 }
 
 
@@ -2055,6 +2086,12 @@ cycles: 2
 */
 void cpu_6502_and_imm(){
     cycles = 2;
+    char localflags[] = "00000000";
+
+    char *dbr = edata_imm();
+    alu(ALU_OP_AND, dbr, acc, acc, localflags);
+
+    zsflagging(flags, acc);
 
 }
 
@@ -2071,6 +2108,12 @@ cycles: 3
 */
 void cpu_6502_and_zp(){
     cycles = 3;
+char localflags[] = "00000000";
+
+    char *dbr = edata_zp();
+    alu(ALU_OP_AND, dbr, acc, acc, localflags);
+
+    zsflagging(flags, acc);
 
 }
 
@@ -2087,6 +2130,12 @@ cycles: 4
 */
 void cpu_6502_and_zpx (){
     cycles = 4;
+    char localflags[] = "00000000";
+
+    char *dbr = edata_zpindex(idx);
+    alu(ALU_OP_AND, dbr, acc, acc, localflags);
+
+    zsflagging(flags, acc);
 
 }
 
@@ -2103,6 +2152,12 @@ cycles: 6
 */
 void cpu_6502_and_izx(){
     cycles = 6;
+char localflags[] = "00000000";
+
+    char *dbr = edata_izx();
+    alu(ALU_OP_AND, dbr, acc, acc, localflags);
+
+    zsflagging(flags, acc);
 
 }
 
@@ -2119,6 +2174,12 @@ cycles: 5
 */
 void cpu_6502_and_izy(){
     cycles = 5;
+    char localflags[] = "00000000";
+
+    char *dbr = edata_izy();
+    alu(ALU_OP_AND, dbr, acc, acc, localflags);
+
+    zsflagging(flags, acc);
 
 }
 
@@ -2135,6 +2196,12 @@ cycles: 4
 */
 void cpu_6502_and_abs(){
     cycles = 4;
+    char localflags[] = "00000000";
+
+    char *dbr = edata_abs();
+    alu(ALU_OP_AND, dbr, acc, acc, localflags);
+
+    zsflagging(flags, acc);
 
 }
 
@@ -2151,6 +2218,12 @@ cycles: 4
 */
 void cpu_6502_and_abx (){
     cycles = 4;
+    char localflags[] = "00000000";
+
+    char *dbr = edata_abindex(idx);
+    alu(ALU_OP_AND, dbr, acc, acc, localflags);
+
+    zsflagging(flags, acc);
 
 }
 
@@ -2167,6 +2240,12 @@ cycles: 4
 */
 void cpu_6502_and_aby(){
     cycles = 4;
+    char localflags[] = "00000000";
+
+    char *dbr = edata_abindex(idy);
+    alu(ALU_OP_AND, dbr, acc, acc, localflags);
+
+    zsflagging(flags, acc);
 
 }
 
