@@ -123,7 +123,7 @@ void push1(char* reg){
 
 
 /*
-   6502 mu-function implementation (file://home/olivier/6502.html#BPL )
+   6502 mu-function implementation (file://home/jan/prog/c/cpu-project/6502.html#BPL )
 name: BPL 
 code: 0x10
 address-mode: rel
@@ -149,7 +149,7 @@ void cpu_6502_bpl_rel(){
 
 
 /*
-   6502 mu-function implementation (file:///home/olivier/6502.html#BMI )
+   6502 mu-function implementation (file:///home/jan/prog/c/cpu-project/6502.html#BMI )
 name: BMI
 code: 0x30
 address-mode: rel
@@ -173,7 +173,7 @@ void cpu_6502_bmi_rel(){
 
 
 /*
-   6502 mu-function implementation (file:///home/olivier/6502.html#BVC )
+   6502 mu-function implementation (file:///home/jan/prog/c/cpu-project/6502.html#BVC )
 name: BVC
 code: 0x50
 address-mode: rel
@@ -197,7 +197,7 @@ void cpu_6502_bvc_rel(){
 
 
 /*
-   6502 mu-function implementation ( file:///home/olivier/6502.html#BVS )
+   6502 mu-function implementation ( file:///home/jan/prog/c/cpu-project/6502.html#BVS )
 name: BVS
 code: 0x70
 address-mode: rel
@@ -221,7 +221,7 @@ void cpu_6502_bvs_rel(){
 
 
 /*
-   6502 mu-function implementation ( file:///home/olivier/6502.html#BCC )
+   6502 mu-function implementation ( file:///home/jan/prog/c/cpu-project/6502.html#BCC )
 name: BCC
 code: 0x90
 address-mode: rel
@@ -245,7 +245,7 @@ void cpu_6502_bcc_rel(){
 
 
 /*
-   6502 mu-function implementation ( file:///home/olivier/6502.html#BCS )
+   6502 mu-function implementation ( file:///home/jan/prog/c/cpu-project/6502.html#BCS )
 name: BCS
 code: 0xB0
 address-mode: rel
@@ -268,7 +268,7 @@ void cpu_6502_bcs_rel(){
 }
 
 /*
-   6502 mu-function implementation ( file:///home/olivier/6502.html#BNE )
+   6502 mu-function implementation ( file:///home/jan/prog/c/cpu-project/6502.html#BNE )
 name: BNE
 code: 0xD0
 address-mode: rel
@@ -285,14 +285,14 @@ void cpu_6502_bne_rel(){
         cp_register(pch, abrh);
         set_rw2read();
         access_memory();
-        alu(ALU_OP_ADD, pcl, dbr, pcl, flags);
+        alu(ALU_OP_ADD, pcl, dbr, pcl, NULL);
     }
     inc_pc(); 
 }
 
 
 /*
-   6502 mu-function implementation ( file:///home/olivier/6502.html#BEQ )
+   6502 mu-function implementation ( file:///home/jan/prog/c/cpu-project/6502.html#BEQ )
 name: BEQ
 code: 0xF0
 address-mode: rel
@@ -317,7 +317,7 @@ void cpu_6502_beq_rel(){
 
 
 /*
-   6502 mu-function implementation ( file:///home/olivier/6502.html#BRK )
+   6502 mu-function implementation ( file:///home/jan/prog/c/cpu-project/6502.html#BRK )
 name: BRK
 code: 0x00
 address-mode: imp
@@ -333,7 +333,7 @@ void cpu_6502_brk_imp(){
 
 
 /*
-   6502 mu-function implementation ( file:///home/olivier/6502.html#RTI )
+   6502 mu-function implementation ( file:///home/jan/prog/c/cpu-project/6502.html#RTI )
 name: RTI
 code: 0x40
 address-mode: imp
@@ -349,7 +349,7 @@ void cpu_6502_rti_imp(){
 
 
 /*
-   6502 mu-function implementation ( file:///home/olivier/6502.html#JSR )
+   6502 mu-function implementation ( file:///home/jan/prog/c/cpu-project/6502.html#JSR )
 name: JSR
 code: 0x20
 address-mode: abs
@@ -384,7 +384,7 @@ void cpu_6502_jsr_abs(){
 
 
 /*
-   6502 mu-function implementation ( file:///home/olivier/6502.html#RTS )
+   6502 mu-function implementation ( file:///home/jan/prog/c/cpu-project/6502.html#RTS )
 name: RTS
 code: 0x60
 address-mode: imp
@@ -403,7 +403,7 @@ void cpu_6502_rts_imp(){
 
 
 /*
-   6502 mu-function implementation ( file:///home/olivier/6502.html#JMP )
+   6502 mu-function implementation ( file:///home/jan/prog/c/cpu-project/6502.html#JMP )
 name: JMP
 code: 0x4C
 address-mode: abs
@@ -414,26 +414,28 @@ cycles: 3
 */
 void cpu_6502_jmp_abs(){
     cycles = 3;
+    char low[] = "00000000";
 
-    cp_register(pcl,abrl);
-    cp_register(pch,abrh);
+    cp_register(pcl, abrl);
+    cp_register(pch, abrh);
     set_rw2read();
     access_memory();
+    cp_register(dbr, low);
 
     inc_pc();
 
     cp_register(pcl, abrl);
     cp_register(pch, abrh);
-    cp_register(dbr, pcl);
     set_rw2read();
     access_memory();
-    cp_register(dbr, pch);
 
+    cp_register(low, pcl);
+    cp_register(dbr, pch);
 }
 
 
 /*
-   6502 mu-function implementation ( file:///home/olivier/6502.html#JMP )
+   6502 mu-function implementation ( file:///home/jan/prog/c/cpu-project/6502.html#JMP )
 name: JMP
 code: 0x6C
 address-mode: ind
@@ -478,7 +480,7 @@ void cpu_6502_jmp_ind(){
 
 
 /*
-   6502 mu-function implementation ( file:///home/olivier/6502.html#BIT )
+   6502 mu-function implementation ( file:///home/jan/prog/c/cpu-project/6502.html#BIT )
 name: BIT
 code: 0x24
 address-mode: zp
@@ -516,7 +518,7 @@ void cpu_6502_bit_zp(){
 
 
 /*
-   6502 mu-function implementation ( file:///home/olivier/6502.html#BIT )
+   6502 mu-function implementation ( file:///home/jan/prog/c/cpu-project/6502.html#BIT )
 name: BIT
 code: 0x2C
 address-mode: abs
@@ -565,7 +567,7 @@ void cpu_6502_bit_abs(){
 
 
 /*
-   6502 mu-function implementation ( file:///home/olivier/6502.html#CLC )
+   6502 mu-function implementation ( file:///home/jan/prog/c/cpu-project/6502.html#CLC )
 name: CLC
 code: 0x18
 address-mode: imp
@@ -581,7 +583,7 @@ void cpu_6502_clc_imp(){
 
 
 /*
-   6502 mu-function implementation ( file:///home/olivier/6502.html#SEC )
+   6502 mu-function implementation ( file:///home/jan/prog/c/cpu-project/6502.html#SEC )
 name: SEC
 code: 0x38
 address-mode: imp
@@ -597,7 +599,7 @@ void cpu_6502_sec_imp(){
 
 
 /*
-   6502 mu-function implementation ( file:///home/olivier/6502.html#CLD )
+   6502 mu-function implementation ( file:///home/jan/prog/c/cpu-project/6502.html#CLD )
 name: CLD
 code: 0xD8
 address-mode: imp
@@ -613,7 +615,7 @@ void cpu_6502_cld_imp(){
 
 
 /*
-   6502 mu-function implementation ( file:///home/olivier/6502.html#SED )
+   6502 mu-function implementation ( file:///home/jan/prog/c/cpu-project/6502.html#SED )
 name: SED
 code: 0xF8
 address-mode: imp
@@ -629,7 +631,7 @@ void cpu_6502_sed_imp(){
 
 
 /*
-   6502 mu-function implementation ( file:///home/olivier/6502.html#CLI )
+   6502 mu-function implementation ( file:///home/jan/prog/c/cpu-project/6502.html#CLI )
 name: CLI
 code: 0x58
 address-mode: imp
@@ -645,7 +647,7 @@ void cpu_6502_cli_imp(){
 
 
 /*
-   6502 mu-function implementation ( file:///home/olivier/6502.html#SEI )
+   6502 mu-function implementation ( file:///home/jan/prog/c/cpu-project/6502.html#SEI )
 name: SEI
 code: 0x78
 address-mode: imp
@@ -661,7 +663,7 @@ void cpu_6502_sei_imp(){
 
 
 /*
-   6502 mu-function implementation ( file:///home/olivier/6502.html#CLV )
+   6502 mu-function implementation ( file:///home/jan/prog/c/cpu-project/6502.html#CLV )
 name: CLV
 code: 0xB8
 address-mode: imp
@@ -677,7 +679,7 @@ void cpu_6502_clv_imp(){
 
 
 /*
-   6502 mu-function implementation ( file:///home/olivier/6502.html#NOP )
+   6502 mu-function implementation ( file:///home/jan/prog/c/cpu-project/6502.html#NOP )
 name: NOP
 code: 0xEA
 address-mode: imp
@@ -692,7 +694,7 @@ void cpu_6502_nop_imp(){
 
 
 /*
-   6502 mu-function implementation ( file:///home/olivier/6502.html#LDA )
+   6502 mu-function implementation ( file:///home/jan/prog/c/cpu-project/6502.html#LDA )
 name: LDA
 code: 0xA9
 address-mode: imm
@@ -717,7 +719,7 @@ void cpu_6502_lda_imm(){
 
 
 /*
-   6502 mu-function implementation ( file:///home/olivier/6502.html#LDA )
+   6502 mu-function implementation ( file:///home/jan/prog/c/cpu-project/6502.html#LDA )
 name: LDA
 code: 0xA5
 address-mode: zp
@@ -751,7 +753,7 @@ void cpu_6502_lda_zp(){
 }
 
 /*
-   6502 mu-function implementation ( file:///home/olivier/6502.html#LDA )
+   6502 mu-function implementation ( file:///home/jan/prog/c/cpu-project/6502.html#LDA )
 name: LDA
 code: 0xB5
 address-mode: zpx
@@ -785,7 +787,7 @@ void cpu_6502_lda_zpx (){
 
 
 /*
-   6502 mu-function implementation ( file:///home/olivier/6502.html#LDA )
+   6502 mu-function implementation ( file:///home/jan/prog/c/cpu-project/6502.html#LDA )
 name: LDA
 code: 0xA1
 address-mode: izx
@@ -835,7 +837,7 @@ void cpu_6502_lda_izx(){
 
 
 /*
-   6502 mu-function implementation ( file:///home/olivier/6502.html#LDA )
+   6502 mu-function implementation ( file:///home/jan/prog/c/cpu-project/6502.html#LDA )
 name: LDA
 code: 0xB1
 address-mode: izy
@@ -880,7 +882,7 @@ void cpu_6502_lda_izy(){
 
 
 /*
-   6502 mu-function implementation ( file:///home/olivier/6502.html#LDA )
+   6502 mu-function implementation ( file:///home/jan/prog/c/cpu-project/6502.html#LDA )
 name: LDA
 code: 0xAD
 address-mode: abs
@@ -922,7 +924,7 @@ void cpu_6502_lda_abs(){
 
 
 /*
-   6502 mu-function implementation ( file:///home/olivier/6502.html#LDA )
+   6502 mu-function implementation ( file:///home/jan/prog/c/cpu-project/6502.html#LDA )
 name: LDA
 code: 0xBD
 address-mode: abx
@@ -964,7 +966,7 @@ void cpu_6502_lda_abx (){
 
 
 /*
-   6502 mu-function implementation ( file:///home/olivier/6502.html#LDA )
+   6502 mu-function implementation ( file:///home/jan/prog/c/cpu-project/6502.html#LDA )
 name: LDA
 code: 0xB9
 address-mode: aby
@@ -1007,7 +1009,7 @@ void cpu_6502_lda_aby(){
 
 
 /*
-   6502 mu-function implementation ( file:///home/olivier/6502.html#STA )
+   6502 mu-function implementation ( file:///home/jan/prog/c/cpu-project/6502.html#STA )
 name: STA
 code: 0x85
 address-mode: zp
@@ -1036,7 +1038,7 @@ void cpu_6502_sta_zp(){
 
 
 /*
-   6502 mu-function implementation ( file:///home/olivier/6502.html#STA )
+   6502 mu-function implementation ( file:///home/jan/prog/c/cpu-project/6502.html#STA )
 name: STA
 code: 0x95
 address-mode: zpx
@@ -1067,7 +1069,7 @@ void cpu_6502_sta_zpx (){
 
 
 /*
-   6502 mu-function implementation ( file:///home/olivier/6502.html#STA )
+   6502 mu-function implementation ( file:///home/jan/prog/c/cpu-project/6502.html#STA )
 name: STA
 code: 0x81
 address-mode: izx
@@ -1112,7 +1114,7 @@ void cpu_6502_sta_izx(){
 
 
 /*
-   6502 mu-function implementation ( file:///home/olivier/6502.html#STA )
+   6502 mu-function implementation ( file:///home/jan/prog/c/cpu-project/6502.html#STA )
 name: STA
 code: 0x91
 address-mode: izy
@@ -1159,7 +1161,7 @@ void cpu_6502_sta_izy(){
     access_memory();
 }
 /*
-   6502 mu-function implementation ( file:///home/olivier/6502.html#STA )
+   6502 mu-function implementation ( file:///home/jan/prog/c/cpu-project/6502.html#STA )
 name: STA
 code: 0x8D
 address-mode: abs
@@ -1199,7 +1201,7 @@ void cpu_6502_sta_abs(){
 
 
 /*
-   6502 mu-function implementation ( file:///home/olivier/6502.html#STA )
+   6502 mu-function implementation ( file:///home/jan/prog/c/cpu-project/6502.html#STA )
 name: STA
 code: 0x9D
 address-mode: abx
@@ -1240,7 +1242,7 @@ void cpu_6502_sta_abx (){
 
 
 /*
-   6502 mu-function implementation ( file:///home/olivier/6502.html#STA )
+   6502 mu-function implementation ( file:///home/jan/prog/c/cpu-project/6502.html#STA )
 name: STA
 code: 0x99
 address-mode: aby
@@ -1281,7 +1283,7 @@ void cpu_6502_sta_aby(){
 
 
 /*
-   6502 mu-function implementation ( file:///home/olivier/6502.html#LDX )
+   6502 mu-function implementation ( file:///home/jan/prog/c/cpu-project/6502.html#LDX )
 name: LDX
 code: 0xA2
 address-mode: imm
@@ -1299,12 +1301,13 @@ void cpu_6502_ldx_imm(){
     access_memory();
     
     cp_register(dbr, idx);
+    zsflagging(flags, idx);
     inc_pc();
 }
 
 
 /*
-   6502 mu-function implementation ( file:///home/olivier/6502.html#LDX )
+   6502 mu-function implementation ( file:///home/jan/prog/c/cpu-project/6502.html#LDX )
 name: LDX
 code: 0xA6
 address-mode: zp
@@ -1334,7 +1337,7 @@ void cpu_6502_ldx_zp(){
 
 
 /*
-   6502 mu-function implementation ( file:///home/olivier/6502.html#LDX )
+   6502 mu-function implementation ( file:///home/jan/prog/c/cpu-project/6502.html#LDX )
 name: LDX
 code: 0xB6
 address-mode: zpy
@@ -1366,7 +1369,7 @@ void cpu_6502_ldx_zpy(){
 
 
 /*
-   6502 mu-function implementation ( file:///home/olivier/6502.html#LDX )
+   6502 mu-function implementation ( file:///home/jan/prog/c/cpu-project/6502.html#LDX )
 name: LDX
 code: 0xAE
 address-mode: abs
@@ -1384,7 +1387,7 @@ void cpu_6502_ldx_abs(){
 
 
 /*
-   6502 mu-function implementation ( file:///home/olivier/6502.html#LDX )
+   6502 mu-function implementation ( file:///home/jan/prog/c/cpu-project/6502.html#LDX )
 name: LDX
 code: 0xBE
 address-mode: aby
@@ -1402,7 +1405,7 @@ void cpu_6502_ldx_aby(){
 
 
 /*
-   6502 mu-function implementation ( file:///home/olivier/6502.html#STX )
+   6502 mu-function implementation ( file:///home/jan/prog/c/cpu-project/6502.html#STX )
 name: STX
 code: 0x86
 address-mode: zp
@@ -1429,7 +1432,7 @@ void cpu_6502_stx_zp(){
 
 
 /*
-   6502 mu-function implementation ( file:///home/olivier/6502.html#STX )
+   6502 mu-function implementation ( file:///home/jan/prog/c/cpu-project/6502.html#STX )
 name: STX
 code: 0x96
 address-mode: zpy
@@ -1460,7 +1463,7 @@ void cpu_6502_stx_zpy(){
 
 
 /*
-   6502 mu-function implementation ( file:///home/olivier/6502.html#STX )
+   6502 mu-function implementation ( file:///home/jan/prog/c/cpu-project/6502.html#STX )
 name: STX
 code: 0x8E
 address-mode: abs
@@ -1500,7 +1503,7 @@ void cpu_6502_stx_abs(){
 
 
 /*
-   6502 mu-function implementation ( file:///home/olivier/6502.html#LDY )
+   6502 mu-function implementation ( file:///home/jan/prog/c/cpu-project/6502.html#LDY )
 name: LDY
 code: 0xA0
 address-mode: imm
@@ -1523,7 +1526,7 @@ void cpu_6502_ldy_imm(){
 
 
 /*
-   6502 mu-function implementation ( file:///home/olivier/6502.html#LDY )
+   6502 mu-function implementation ( file:///home/jan/prog/c/cpu-project/6502.html#LDY )
 name: LDY
 code: 0xA4
 address-mode: zp
@@ -1554,7 +1557,7 @@ void cpu_6502_ldy_zp(){
 
 
 /*
-   6502 mu-function implementation ( file:///home/olivier/6502.html#LDY )
+   6502 mu-function implementation ( file:///home/jan/prog/c/cpu-project/6502.html#LDY )
 name: LDY
 code: 0xB4
 address-mode: zpx
@@ -1587,7 +1590,7 @@ void cpu_6502_ldy_zpx (){
 
 
 /*
-   6502 mu-function implementation ( file:///home/olivier/6502.html#LDY )
+   6502 mu-function implementation ( file:///home/jan/prog/c/cpu-project/6502.html#LDY )
 name: LDY
 code: 0xAC
 address-mode: abs
@@ -1607,7 +1610,7 @@ void cpu_6502_ldy_abs(){
 
 
 /*
-   6502 mu-function implementation ( file:///home/olivier/6502.html#LDY )
+   6502 mu-function implementation ( file:///home/jan/prog/c/cpu-project/6502.html#LDY )
 name: LDY
 code: 0xBC
 address-mode: abx
@@ -1625,7 +1628,7 @@ void cpu_6502_ldy_abx (){
 
 
 /*
-   6502 mu-function implementation ( file:///home/olivier/6502.html#STY )
+   6502 mu-function implementation ( file:///home/jan/prog/c/cpu-project/6502.html#STY )
 name: STY
 code: 0x84
 address-mode: zp
@@ -1657,7 +1660,7 @@ void cpu_6502_sty_zp(){
 
 
 /*
-   6502 mu-function implementation ( file:///home/olivier/6502.html#STY )
+   6502 mu-function implementation ( file:///home/jan/prog/c/cpu-project/6502.html#STY )
 name: STY
 code: 0x94
 address-mode: zpx
@@ -1690,7 +1693,7 @@ void cpu_6502_sty_zpx (){
 
 
 /*
-   6502 mu-function implementation ( file:///home/olivier/6502.html#STY )
+   6502 mu-function implementation ( file:///home/jan/prog/c/cpu-project/6502.html#STY )
 name: STY
 code: 0x8C
 address-mode: abs
@@ -1729,7 +1732,7 @@ void cpu_6502_sty_abs(){
 
 
 /*
-   6502 mu-function implementation ( file:///home/olivier/6502.html#TAX )
+   6502 mu-function implementation ( file:///home/jan/prog/c/cpu-project/6502.html#TAX )
 name: TAX
 code: 0xAA
 address-mode: imp
@@ -1746,7 +1749,7 @@ void cpu_6502_tax_imp(){
 
 
 /*
-   6502 mu-function implementation ( file:///home/olivier/6502.html#TXA )
+   6502 mu-function implementation ( file:///home/jan/prog/c/cpu-project/6502.html#TXA )
 name: TXA
 code: 0x8A
 address-mode: imp
@@ -1763,7 +1766,7 @@ void cpu_6502_txa_imp(){
 
 
 /*
-   6502 mu-function implementation ( file:///home/olivier/6502.html#TAY )
+   6502 mu-function implementation ( file:///home/jan/prog/c/cpu-project/6502.html#TAY )
 name: TAY
 code: 0xA8
 address-mode: imp
@@ -1780,7 +1783,7 @@ void cpu_6502_tay_imp(){
 
 
 /*
-   6502 mu-function implementation ( file:///home/olivier/6502.html#TYA )
+   6502 mu-function implementation ( file:///home/jan/prog/c/cpu-project/6502.html#TYA )
 name: TYA
 code: 0x98
 address-mode: imp
@@ -1797,7 +1800,7 @@ void cpu_6502_tya_imp(){
 
 
 /*
-   6502 mu-function implementation ( file:///home/olivier/6502.html#TSX )
+   6502 mu-function implementation ( file:///home/jan/prog/c/cpu-project/6502.html#TSX )
 name: TSX
 code: 0xBA
 address-mode: imp
@@ -1813,7 +1816,7 @@ void cpu_6502_tsx_imp(){
 
 
 /*
-   6502 mu-function implementation ( file:///home/olivier/6502.html#TXS )
+   6502 mu-function implementation ( file:///home/jan/prog/c/cpu-project/6502.html#TXS )
 name: TXS
 code: 0x9A
 address-mode: imp
@@ -1829,7 +1832,7 @@ void cpu_6502_txs_imp(){
 
 
 /*
-   6502 mu-function implementation ( file:///home/olivier/6502.html#PLA )
+   6502 mu-function implementation ( file:///home/jan/prog/c/cpu-project/6502.html#PLA )
 name: PLA
 code: 0x68
 address-mode: imp
@@ -1845,7 +1848,7 @@ void cpu_6502_pla_imp(){
 
 
 /*
-   6502 mu-function implementation ( file:///home/olivier/6502.html#PHA )
+   6502 mu-function implementation ( file:///home/jan/prog/c/cpu-project/6502.html#PHA )
 name: PHA
 code: 0x48
 address-mode: imp
@@ -1861,7 +1864,7 @@ void cpu_6502_pha_imp(){
 
 
 /*
-   6502 mu-function implementation ( file:///home/olivier/6502.html#PLP )
+   6502 mu-function implementation ( file:///home/jan/prog/c/cpu-project/6502.html#PLP )
 name: PLP
 code: 0x28
 address-mode: imp
@@ -1877,7 +1880,7 @@ void cpu_6502_plp_imp(){
 
 
 /*
-   6502 mu-function implementation ( file:///home/olivier/6502.html#PHP )
+   6502 mu-function implementation ( file:///home/jan/prog/c/cpu-project/6502.html#PHP )
 name: PHP
 code: 0x08
 address-mode: imp
@@ -1892,7 +1895,7 @@ void cpu_6502_php_imp(){
 
 
 /*
-   6502 mu-function implementation ( file:///home/olivier/6502.html#ORA )
+   6502 mu-function implementation ( file:///home/jan/prog/c/cpu-project/6502.html#ORA )
 name: ORA
 code: 0x09
 address-mode: imm
@@ -1921,7 +1924,7 @@ void cpu_6502_ora_imm(){
 
 
 /*
-   6502 mu-function implementation ( file:///home/olivier/6502.html#ORA )
+   6502 mu-function implementation ( file:///home/jan/prog/c/cpu-project/6502.html#ORA )
 name: ORA
 code: 0x05
 address-mode: zp
@@ -1952,7 +1955,7 @@ void cpu_6502_ora_zp(){
 
 
 /*
-   6502 mu-function implementation ( file:///home/olivier/6502.html#ORA )
+   6502 mu-function implementation ( file:///home/jan/prog/c/cpu-project/6502.html#ORA )
 name: ORA
 code: 0x15
 address-mode: zpx
@@ -1973,7 +1976,7 @@ void cpu_6502_ora_zpx (){
 
 
 /*
-   6502 mu-function implementation ( file:///home/olivier/6502.html#ORA )
+   6502 mu-function implementation ( file:///home/jan/prog/c/cpu-project/6502.html#ORA )
 name: ORA
 code: 0x01
 address-mode: izx
@@ -1995,7 +1998,7 @@ void cpu_6502_ora_izx(){
 
 
 /*
-   6502 mu-function implementation ( file:///home/olivier/6502.html#ORA )
+   6502 mu-function implementation ( file:///home/jan/prog/c/cpu-project/6502.html#ORA )
 name: ORA
 code: 0x11
 address-mode: izy
@@ -2016,7 +2019,7 @@ void cpu_6502_ora_izy(){
 
 
 /*
-   6502 mu-function implementation ( file:///home/olivier/6502.html#ORA )
+   6502 mu-function implementation ( file:///home/jan/prog/c/cpu-project/6502.html#ORA )
 name: ORA
 code: 0x0D
 address-mode: abs
@@ -2037,7 +2040,7 @@ void cpu_6502_ora_abs(){
 
 
 /*
-   6502 mu-function implementation ( file:///home/olivier/6502.html#ORA )
+   6502 mu-function implementation ( file:///home/jan/prog/c/cpu-project/6502.html#ORA )
 name: ORA
 code: 0x1D
 address-mode: abx
@@ -2058,7 +2061,7 @@ void cpu_6502_ora_abx (){
 
 
 /*
-   6502 mu-function implementation ( file:///home/olivier/6502.html#ORA )
+   6502 mu-function implementation ( file:///home/jan/prog/c/cpu-project/6502.html#ORA )
 name: ORA
 code: 0x19
 address-mode: aby
@@ -2079,7 +2082,7 @@ void cpu_6502_ora_aby(){
 
 
 /*
-   6502 mu-function implementation ( file:///home/olivier/6502.html#AND )
+   6502 mu-function implementation ( file:///home/jan/prog/c/cpu-project/6502.html#AND )
 name: AND
 code: 0x29
 address-mode: imm
@@ -2101,7 +2104,7 @@ void cpu_6502_and_imm(){
 
 
 /*
-   6502 mu-function implementation ( file:///home/olivier/6502.html#AND )
+   6502 mu-function implementation ( file:///home/jan/prog/c/cpu-project/6502.html#AND )
 name: AND
 code: 0x25
 address-mode: zp
@@ -2123,7 +2126,7 @@ char localflags[] = "00000000";
 
 
 /*
-   6502 mu-function implementation ( file:///home/olivier/6502.html#AND )
+   6502 mu-function implementation ( file:///home/jan/prog/c/cpu-project/6502.html#AND )
 name: AND
 code: 0x35
 address-mode: zpx
@@ -2145,7 +2148,7 @@ void cpu_6502_and_zpx (){
 
 
 /*
-   6502 mu-function implementation ( file:///home/olivier/6502.html#AND )
+   6502 mu-function implementation ( file:///home/jan/prog/c/cpu-project/6502.html#AND )
 name: AND
 code: 0x21
 address-mode: izx
@@ -2167,7 +2170,7 @@ char localflags[] = "00000000";
 
 
 /*
-   6502 mu-function implementation ( file:///home/olivier/6502.html#AND )
+   6502 mu-function implementation ( file:///home/jan/prog/c/cpu-project/6502.html#AND )
 name: AND
 code: 0x31
 address-mode: izy
@@ -2189,7 +2192,7 @@ void cpu_6502_and_izy(){
 
 
 /*
-   6502 mu-function implementation ( file:///home/olivier/6502.html#AND )
+   6502 mu-function implementation ( file:///home/jan/prog/c/cpu-project/6502.html#AND )
 name: AND
 code: 0x2D
 address-mode: abs
@@ -2211,7 +2214,7 @@ void cpu_6502_and_abs(){
 
 
 /*
-   6502 mu-function implementation ( file:///home/olivier/6502.html#AND )
+   6502 mu-function implementation ( file:///home/jan/prog/c/cpu-project/6502.html#AND )
 name: AND
 code: 0x3D
 address-mode: abx
@@ -2233,7 +2236,7 @@ void cpu_6502_and_abx (){
 
 
 /*
-   6502 mu-function implementation ( file:///home/olivier/6502.html#AND )
+   6502 mu-function implementation ( file:///home/jan/prog/c/cpu-project/6502.html#AND )
 name: AND
 code: 0x39
 address-mode: aby
@@ -2255,7 +2258,7 @@ void cpu_6502_and_aby(){
 
 
 /*
-   6502 mu-function implementation ( file:///home/olivier/6502.html#EOR )
+   6502 mu-function implementation ( file:///home/jan/prog/c/cpu-project/6502.html#EOR )
 name: EOR
 code: 0x49
 address-mode: imm
@@ -2277,7 +2280,7 @@ void cpu_6502_eor_imm(){
 
 
 /*
-   6502 mu-function implementation ( file:///home/olivier/6502.html#EOR )
+   6502 mu-function implementation ( file:///home/jan/prog/c/cpu-project/6502.html#EOR )
 name: EOR
 code: 0x45
 address-mode: zp
@@ -2299,7 +2302,7 @@ void cpu_6502_eor_zp(){
 
 
 /*
-   6502 mu-function implementation ( file:///home/olivier/6502.html#EOR )
+   6502 mu-function implementation ( file:///home/jan/prog/c/cpu-project/6502.html#EOR )
 name: EOR
 code: 0x55
 address-mode: zpx
@@ -2321,7 +2324,7 @@ void cpu_6502_eor_zpx (){
 
 
 /*
-   6502 mu-function implementation ( file:///home/olivier/6502.html#EOR )
+   6502 mu-function implementation ( file:///home/jan/prog/c/cpu-project/6502.html#EOR )
 name: EOR
 code: 0x41
 address-mode: izx
@@ -2343,7 +2346,7 @@ void cpu_6502_eor_izx(){
 
 
 /*
-   6502 mu-function implementation ( file:///home/olivier/6502.html#EOR )
+   6502 mu-function implementation ( file:///home/jan/prog/c/cpu-project/6502.html#EOR )
 name: EOR
 code: 0x51
 address-mode: izy
@@ -2365,7 +2368,7 @@ void cpu_6502_eor_izy(){
 
 
 /*
-   6502 mu-function implementation ( file:///home/olivier/6502.html#EOR )
+   6502 mu-function implementation ( file:///home/jan/prog/c/cpu-project/6502.html#EOR )
 name: EOR
 code: 0x4D
 address-mode: abs
@@ -2387,7 +2390,7 @@ void cpu_6502_eor_abs(){
 
 
 /*
-   6502 mu-function implementation ( file:///home/olivier/6502.html#EOR )
+   6502 mu-function implementation ( file:///home/jan/prog/c/cpu-project/6502.html#EOR )
 name: EOR
 code: 0x5D
 address-mode: abx
@@ -2409,7 +2412,7 @@ void cpu_6502_eor_abx (){
 
 
 /*
-   6502 mu-function implementation ( file:///home/olivier/6502.html#EOR )
+   6502 mu-function implementation ( file:///home/jan/prog/c/cpu-project/6502.html#EOR )
 name: EOR
 code: 0x59
 address-mode: aby
@@ -2431,7 +2434,7 @@ void cpu_6502_eor_aby(){
 
 
 /*
-   6502 mu-function implementation ( file:///home/olivier/6502.html#ADC )
+   6502 mu-function implementation ( file:///home/jan/prog/c/cpu-project/6502.html#ADC )
 name: ADC
 code: 0x69
 address-mode: imm
@@ -2454,7 +2457,7 @@ void cpu_6502_adc_imm(){
 
 
 /*
-   6502 mu-function implementation ( file:///home/olivier/6502.html#ADC )
+   6502 mu-function implementation ( file:///home/jan/prog/c/cpu-project/6502.html#ADC )
 name: ADC
 code: 0x65
 address-mode: zp
@@ -2483,7 +2486,7 @@ void cpu_6502_adc_zp(){
 
 
 /*
-   6502 mu-function implementation ( file:///home/olivier/6502.html#ADC )
+   6502 mu-function implementation ( file:///home/jan/prog/c/cpu-project/6502.html#ADC )
 name: ADC
 code: 0x75
 address-mode: zpx
@@ -2515,7 +2518,7 @@ void cpu_6502_adc_zpx (){
 
 
 /*
-   6502 mu-function implementation ( file:///home/olivier/6502.html#ADC )
+   6502 mu-function implementation ( file:///home/jan/prog/c/cpu-project/6502.html#ADC )
 name: ADC
 code: 0x61
 address-mode: izx
@@ -2563,7 +2566,7 @@ void cpu_6502_adc_izx(){
 
 
 /*
-   6502 mu-function implementation ( file:///home/olivier/6502.html#ADC )
+   6502 mu-function implementation ( file:///home/jan/prog/c/cpu-project/6502.html#ADC )
 name: ADC
 code: 0x71
 address-mode: izy
@@ -2579,7 +2582,7 @@ void cpu_6502_adc_izy(){
 
 
 /*
-   6502 mu-function implementation ( file:///home/olivier/6502.html#ADC )
+   6502 mu-function implementation ( file:///home/jan/prog/c/cpu-project/6502.html#ADC )
 name: ADC
 code: 0x6D
 address-mode: abs
@@ -2595,7 +2598,7 @@ void cpu_6502_adc_abs(){
 
 
 /*
-   6502 mu-function implementation ( file:///home/olivier/6502.html#ADC )
+   6502 mu-function implementation ( file:///home/jan/prog/c/cpu-project/6502.html#ADC )
 name: ADC
 code: 0x7D
 address-mode: abx
@@ -2611,7 +2614,7 @@ void cpu_6502_adc_abx (){
 
 
 /*
-   6502 mu-function implementation ( file:///home/olivier/6502.html#ADC )
+   6502 mu-function implementation ( file:///home/jan/prog/c/cpu-project/6502.html#ADC )
 name: ADC
 code: 0x79
 address-mode: aby
@@ -2627,7 +2630,7 @@ void cpu_6502_adc_aby(){
 
 
 /*
-   6502 mu-function implementation ( file:///home/olivier/6502.html#SBC )
+   6502 mu-function implementation ( file:///home/jan/prog/c/cpu-project/6502.html#SBC )
 name: SBC
 code: 0xE9
 address-mode: imm
@@ -2643,7 +2646,7 @@ void cpu_6502_sbc_imm(){
 
 
 /*
-   6502 mu-function implementation ( file:///home/olivier/6502.html#SBC )
+   6502 mu-function implementation ( file:///home/jan/prog/c/cpu-project/6502.html#SBC )
 name: SBC
 code: 0xE5
 address-mode: zp
@@ -2659,7 +2662,7 @@ void cpu_6502_sbc_zp(){
 
 
 /*
-   6502 mu-function implementation ( file:///home/olivier/6502.html#SBC )
+   6502 mu-function implementation ( file:///home/jan/prog/c/cpu-project/6502.html#SBC )
 name: SBC
 code: 0xF5
 address-mode: zpx
@@ -2675,7 +2678,7 @@ void cpu_6502_sbc_zpx (){
 
 
 /*
-   6502 mu-function implementation ( file:///home/olivier/6502.html#SBC )
+   6502 mu-function implementation ( file:///home/jan/prog/c/cpu-project/6502.html#SBC )
 name: SBC
 code: 0xE1
 address-mode: izx
@@ -2691,7 +2694,7 @@ void cpu_6502_sbc_izx(){
 
 
 /*
-   6502 mu-function implementation ( file:///home/olivier/6502.html#SBC )
+   6502 mu-function implementation ( file:///home/jan/prog/c/cpu-project/6502.html#SBC )
 name: SBC
 code: 0xF1
 address-mode: izy
@@ -2707,7 +2710,7 @@ void cpu_6502_sbc_izy(){
 
 
 /*
-   6502 mu-function implementation ( file:///home/olivier/6502.html#SBC )
+   6502 mu-function implementation ( file:///home/jan/prog/c/cpu-project/6502.html#SBC )
 name: SBC
 code: 0xED
 address-mode: abs
@@ -2723,7 +2726,7 @@ void cpu_6502_sbc_abs(){
 
 
 /*
-   6502 mu-function implementation ( file:///home/olivier/6502.html#SBC )
+   6502 mu-function implementation ( file:///home/jan/prog/c/cpu-project/6502.html#SBC )
 name: SBC
 code: 0xFD
 address-mode: abx
@@ -2739,7 +2742,7 @@ void cpu_6502_sbc_abx (){
 
 
 /*
-   6502 mu-function implementation ( file:///home/olivier/6502.html#SBC )
+   6502 mu-function implementation ( file:///home/jan/prog/c/cpu-project/6502.html#SBC )
 name: SBC
 code: 0xF9
 address-mode: aby
@@ -2755,7 +2758,7 @@ void cpu_6502_sbc_aby(){
 
 
 /*
-   6502 mu-function implementation ( file:///home/olivier/6502.html#CMP )
+   6502 mu-function implementation ( file:///home/jan/prog/c/cpu-project/6502.html#CMP )
 name: CMP
 code: 0xC9
 address-mode: imm
@@ -2779,7 +2782,7 @@ void cpu_6502_cmp_imm(){
 
 
 /*
-   6502 mu-function implementation ( file:///home/olivier/6502.html#CMP )
+   6502 mu-function implementation ( file:///home/jan/prog/c/cpu-project/6502.html#CMP )
 name: CMP
 code: 0xC5
 address-mode: zp
@@ -2810,7 +2813,7 @@ void cpu_6502_cmp_zp(){
 
 
 /*
-   6502 mu-function implementation ( file:///home/olivier/6502.html#CMP )
+   6502 mu-function implementation ( file:///home/jan/prog/c/cpu-project/6502.html#CMP )
 name: CMP
 code: 0xD5
 address-mode: zpx
@@ -2827,7 +2830,7 @@ void cpu_6502_cmp_zpx (){
 
 
 /*
-   6502 mu-function implementation ( file:///home/olivier/6502.html#CMP )
+   6502 mu-function implementation ( file:///home/jan/prog/c/cpu-project/6502.html#CMP )
 name: CMP
 code: 0xC1
 address-mode: izx
@@ -2844,7 +2847,7 @@ void cpu_6502_cmp_izx(){
 
 
 /*
-   6502 mu-function implementation ( file:///home/olivier/6502.html#CMP )
+   6502 mu-function implementation ( file:///home/jan/prog/c/cpu-project/6502.html#CMP )
 name: CMP
 code: 0xD1
 address-mode: izy
@@ -2861,7 +2864,7 @@ void cpu_6502_cmp_izy(){
 
 
 /*
-   6502 mu-function implementation ( file:///home/olivier/6502.html#CMP )
+   6502 mu-function implementation ( file:///home/jan/prog/c/cpu-project/6502.html#CMP )
 name: CMP
 code: 0xCD
 address-mode: abs
@@ -2878,7 +2881,7 @@ void cpu_6502_cmp_abs(){
 
 
 /*
-   6502 mu-function implementation ( file:///home/olivier/6502.html#CMP )
+   6502 mu-function implementation ( file:///home/jan/prog/c/cpu-project/6502.html#CMP )
 name: CMP
 code: 0xDD
 address-mode: abx
@@ -2895,7 +2898,7 @@ void cpu_6502_cmp_abx (){
 
 
 /*
-   6502 mu-function implementation ( file:///home/olivier/6502.html#CMP )
+   6502 mu-function implementation ( file:///home/jan/prog/c/cpu-project/6502.html#CMP )
 name: CMP
 code: 0xD9
 address-mode: aby
@@ -2911,7 +2914,7 @@ void cpu_6502_cmp_aby(){
 
 
 /*
-   6502 mu-function implementation ( file:///home/olivier/6502.html#CPX )
+   6502 mu-function implementation ( file:///home/jan/prog/c/cpu-project/6502.html#CPX )
 name: CPX
 code: 0xE0
 address-mode: imm
@@ -2928,7 +2931,7 @@ void cpu_6502_cpx_imm(){
 
 
 /*
-   6502 mu-function implementation ( file:///home/olivier/6502.html#CPX )
+   6502 mu-function implementation ( file:///home/jan/prog/c/cpu-project/6502.html#CPX )
 name: CPX
 code: 0xE4
 address-mode: zp
@@ -2945,7 +2948,7 @@ void cpu_6502_cpx_zp(){
 
 
 /*
-   6502 mu-function implementation ( file:///home/olivier/6502.html#CPX )
+   6502 mu-function implementation ( file:///home/jan/prog/c/cpu-project/6502.html#CPX )
 name: CPX
 code: 0xEC
 address-mode: abs
@@ -2961,7 +2964,7 @@ void cpu_6502_cpx_abs(){
 
 
 /*
-   6502 mu-function implementation ( file:///home/olivier/6502.html#CPY )
+   6502 mu-function implementation ( file:///home/jan/prog/c/cpu-project/6502.html#CPY )
 name: CPY
 code: 0xC0
 address-mode: imm
@@ -2977,7 +2980,7 @@ void cpu_6502_cpy_imm(){
 
 
 /*
-   6502 mu-function implementation ( file:///home/olivier/6502.html#CPY )
+   6502 mu-function implementation ( file:///home/jan/prog/c/cpu-project/6502.html#CPY )
 name: CPY
 code: 0xC4
 address-mode: zp
@@ -2994,7 +2997,7 @@ void cpu_6502_cpy_zp(){
 
 
 /*
-   6502 mu-function implementation ( file:///home/olivier/6502.html#CPY )
+   6502 mu-function implementation ( file:///home/jan/prog/c/cpu-project/6502.html#CPY )
 name: CPY
 code: 0xCC
 address-mode: abs
@@ -3010,7 +3013,7 @@ void cpu_6502_cpy_abs(){
 
 
 /*
-   6502 mu-function implementation ( file:///home/olivier/6502.html#DEC )
+   6502 mu-function implementation ( file:///home/jan/prog/c/cpu-project/6502.html#DEC )
 name: DEC
 code: 0xC6
 address-mode: zp
@@ -3026,7 +3029,7 @@ void cpu_6502_dec_zp(){
 
 
 /*
-   6502 mu-function implementation ( file:///home/olivier/6502.html#DEC )
+   6502 mu-function implementation ( file:///home/jan/prog/c/cpu-project/6502.html#DEC )
 name: DEC
 code: 0xD6
 address-mode: zpx
@@ -3042,7 +3045,7 @@ void cpu_6502_dec_zpx (){
 
 
 /*
-   6502 mu-function implementation ( file:///home/olivier/6502.html#DEC )
+   6502 mu-function implementation ( file:///home/jan/prog/c/cpu-project/6502.html#DEC )
 name: DEC
 code: 0xCE
 address-mode: abs
@@ -3058,7 +3061,7 @@ void cpu_6502_dec_abs(){
 
 
 /*
-   6502 mu-function implementation ( file:///home/olivier/6502.html#DEC )
+   6502 mu-function implementation ( file:///home/jan/prog/c/cpu-project/6502.html#DEC )
 name: DEC
 code: 0xDE
 address-mode: abx
@@ -3073,7 +3076,7 @@ void cpu_6502_dec_abx (){
 
 
 /*
-   6502 mu-function implementation ( file:///home/olivier/6502.html#DEX )
+   6502 mu-function implementation ( file:///home/jan/prog/c/cpu-project/6502.html#DEX )
 name: DEX
 code: 0xCA
 address-mode: imp
@@ -3089,7 +3092,7 @@ void cpu_6502_dex_imp(){
 
 
 /*
-   6502 mu-function implementation ( file:///home/olivier/6502.html#DEY )
+   6502 mu-function implementation ( file:///home/jan/prog/c/cpu-project/6502.html#DEY )
 name: DEY
 code: 0x88
 address-mode: imp
@@ -3105,7 +3108,7 @@ void cpu_6502_dey_imp(){
 
 
 /*
-   6502 mu-function implementation ( file:///home/olivier/6502.html#INC )
+   6502 mu-function implementation ( file:///home/jan/prog/c/cpu-project/6502.html#INC )
 name: INC
 code: 0xE6
 address-mode: zp
@@ -3136,7 +3139,7 @@ void cpu_6502_inc_zp(){
 
 
 /*
-   6502 mu-function implementation ( file:///home/olivier/6502.html#INC )
+   6502 mu-function implementation ( file:///home/jan/prog/c/cpu-project/6502.html#INC )
 name: INC
 code: 0xF6
 address-mode: zpx
@@ -3151,7 +3154,7 @@ void cpu_6502_inc_zpx (){
 
 
 /*
-   6502 mu-function implementation ( file:///home/olivier/6502.html#INC )
+   6502 mu-function implementation ( file:///home/jan/prog/c/cpu-project/6502.html#INC )
 name: INC
 code: 0xEE
 address-mode: abs
@@ -3167,7 +3170,7 @@ void cpu_6502_inc_abs(){
 
 
 /*
-   6502 mu-function implementation ( file:///home/olivier/6502.html#INC )
+   6502 mu-function implementation ( file:///home/jan/prog/c/cpu-project/6502.html#INC )
 name: INC
 code: 0xFE
 address-mode: abx
@@ -3183,7 +3186,7 @@ void cpu_6502_inc_abx (){
 
 
 /*
-   6502 mu-function implementation ( file:///home/olivier/6502.html#INX )
+   6502 mu-function implementation ( file:///home/jan/prog/c/cpu-project/6502.html#INX )
 name: INX
 code: 0xE8
 address-mode: imp
@@ -3199,7 +3202,7 @@ void cpu_6502_inx_imp(){
 
 
 /*
-   6502 mu-function implementation ( file:///home/olivier/6502.html#INY )
+   6502 mu-function implementation ( file:///home/jan/prog/c/cpu-project/6502.html#INY )
 name: INY
 code: 0xC8
 address-mode: imp
@@ -3216,7 +3219,7 @@ void cpu_6502_iny_imp(){
 
 
 /*
-   6502 mu-function implementation ( file:///home/olivier/6502.html#ASL )
+   6502 mu-function implementation ( file:///home/jan/prog/c/cpu-project/6502.html#ASL )
 name: ASL
 code: 0x0A
 address-mode: imp
@@ -3232,7 +3235,7 @@ void cpu_6502_asl_imp(){
 
 
 /*
-   6502 mu-function implementation ( file:///home/olivier/6502.html#ASL )
+   6502 mu-function implementation ( file:///home/jan/prog/c/cpu-project/6502.html#ASL )
 name: ASL
 code: 0x06
 address-mode: zp
@@ -3248,7 +3251,7 @@ void cpu_6502_asl_zp(){
 
 
 /*
-   6502 mu-function implementation ( file:///home/olivier/6502.html#ASL )
+   6502 mu-function implementation ( file:///home/jan/prog/c/cpu-project/6502.html#ASL )
 name: ASL
 code: 0x16
 address-mode: zpx
@@ -3264,7 +3267,7 @@ void cpu_6502_asl_zpx (){
 
 
 /*
-   6502 mu-function implementation ( file:///home/olivier/6502.html#ASL )
+   6502 mu-function implementation ( file:///home/jan/prog/c/cpu-project/6502.html#ASL )
 name: ASL
 code: 0x0E
 address-mode: abs
@@ -3280,7 +3283,7 @@ void cpu_6502_asl_abs(){
 
 
 /*
-   6502 mu-function implementation ( file:///home/olivier/6502.html#ASL )
+   6502 mu-function implementation ( file:///home/jan/prog/c/cpu-project/6502.html#ASL )
 name: ASL
 code: 0x1E
 address-mode: abx
@@ -3296,7 +3299,7 @@ void cpu_6502_asl_abx (){
 
 
 /*
-   6502 mu-function implementation ( file:///home/olivier/6502.html#ROL )
+   6502 mu-function implementation ( file:///home/jan/prog/c/cpu-project/6502.html#ROL )
 name: ROL
 code: 0x2A
 address-mode: imp
@@ -3312,7 +3315,7 @@ void cpu_6502_rol_imp(){
 
 
 /*
-   6502 mu-function implementation ( file:///home/olivier/6502.html#ROL )
+   6502 mu-function implementation ( file:///home/jan/prog/c/cpu-project/6502.html#ROL )
 name: ROL
 code: 0x26
 address-mode: zp
@@ -3327,7 +3330,7 @@ void cpu_6502_rol_zp(){
 
 
 /*
-   6502 mu-function implementation ( file:///home/olivier/6502.html#ROL )
+   6502 mu-function implementation ( file:///home/jan/prog/c/cpu-project/6502.html#ROL )
 name: ROL
 code: 0x36
 address-mode: zpx
@@ -3342,7 +3345,7 @@ void cpu_6502_rol_zpx (){
 
 
 /*
-   6502 mu-function implementation ( file:///home/olivier/6502.html#ROL )
+   6502 mu-function implementation ( file:///home/jan/prog/c/cpu-project/6502.html#ROL )
 name: ROL
 code: 0x2E
 address-mode: abs
@@ -3358,7 +3361,7 @@ void cpu_6502_rol_abs(){
 
 
 /*
-   6502 mu-function implementation ( file:///home/olivier/6502.html#ROL )
+   6502 mu-function implementation ( file:///home/jan/prog/c/cpu-project/6502.html#ROL )
 name: ROL
 code: 0x3E
 address-mode: abx
@@ -3374,7 +3377,7 @@ void cpu_6502_rol_abx (){
 
 
 /*
-   6502 mu-function implementation ( file:///home/olivier/6502.html#LSR )
+   6502 mu-function implementation ( file:///home/jan/prog/c/cpu-project/6502.html#LSR )
 name: LSR
 code: 0x4A
 address-mode: imp
@@ -3390,7 +3393,7 @@ void cpu_6502_lsr_imp(){
 
 
 /*
-   6502 mu-function implementation ( file:///home/olivier/6502.html#LSR )
+   6502 mu-function implementation ( file:///home/jan/prog/c/cpu-project/6502.html#LSR )
 name: LSR
 code: 0x46
 address-mode: zp
@@ -3406,7 +3409,7 @@ void cpu_6502_lsr_zp(){
 
 
 /*
-   6502 mu-function implementation ( file:///home/olivier/6502.html#LSR )
+   6502 mu-function implementation ( file:///home/jan/prog/c/cpu-project/6502.html#LSR )
 name: LSR
 code: 0x56
 address-mode: zpx
@@ -3422,7 +3425,7 @@ void cpu_6502_lsr_zpx (){
 
 
 /*
-   6502 mu-function implementation ( file:///home/olivier/6502.html#LSR )
+   6502 mu-function implementation ( file:///home/jan/prog/c/cpu-project/6502.html#LSR )
 name: LSR
 code: 0x4E
 address-mode: abs
@@ -3438,7 +3441,7 @@ void cpu_6502_lsr_abs(){
 
 
 /*
-   6502 mu-function implementation ( file:///home/olivier/6502.html#LSR )
+   6502 mu-function implementation ( file:///home/jan/prog/c/cpu-project/6502.html#LSR )
 name: LSR
 code: 0x5E
 address-mode: abx
@@ -3454,7 +3457,7 @@ void cpu_6502_lsr_abx (){
 
 
 /*
-   6502 mu-function implementation ( file:///home/olivier/6502.html#ROR )
+   6502 mu-function implementation ( file:///home/jan/prog/c/cpu-project/6502.html#ROR )
 name: ROR
 code: 0x6A
 address-mode: imp
@@ -3470,7 +3473,7 @@ void cpu_6502_ror_imp(){
 
 
 /*
-   6502 mu-function implementation ( file:///home/olivier/6502.html#ROR )
+   6502 mu-function implementation ( file:///home/jan/prog/c/cpu-project/6502.html#ROR )
 name: ROR
 code: 0x66
 address-mode: zp
@@ -3486,7 +3489,7 @@ void cpu_6502_ror_zp(){
 
 
 /*
-   6502 mu-function implementation ( file:///home/olivier/6502.html#ROR )
+   6502 mu-function implementation ( file:///home/jan/prog/c/cpu-project/6502.html#ROR )
 name: ROR
 code: 0x76
 address-mode: zpx
@@ -3502,7 +3505,7 @@ void cpu_6502_ror_zpx (){
 
 
 /*
-   6502 mu-function implementation ( file:///home/olivier/6502.html#ROR )
+   6502 mu-function implementation ( file:///home/jan/prog/c/cpu-project/6502.html#ROR )
 name: ROR
 code: 0x6E
 address-mode: abs
@@ -3518,7 +3521,7 @@ void cpu_6502_ror_abs(){
 
 
 /*
-   6502 mu-function implementation ( file:///home/olivier/6502.html#ROR )
+   6502 mu-function implementation ( file:///home/jan/prog/c/cpu-project/6502.html#ROR )
 name: ROR
 code: 0x7E
 address-mode: abx
