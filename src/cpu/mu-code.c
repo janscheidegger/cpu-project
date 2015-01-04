@@ -328,7 +328,8 @@ cycles: 7
 */
 void cpu_6502_brk_imp(){
     cycles = 7;
-
+    setIRQflag(flags);
+    //TODO: DODO
 }
 
 
@@ -774,7 +775,7 @@ void cpu_6502_lda_zpx (){
     cp_register(dbr, abrl);
     cp_register(zero, abrh);
 
-    alu(ALU_OP_ADD, abrl, idx, abrl, "00000000");
+    alu(ALU_OP_ADD, abrl, idx, abrl, NULL);
 
     set_rw2read();
     access_memory();
@@ -1058,7 +1059,7 @@ void cpu_6502_sta_zpx (){
     cp_register(dbr, abrl);
     cp_register(zero, abrh);
 
-    alu(ALU_OP_ADD, abrl, idx, abrl, "00000000");
+    alu(ALU_OP_ADD, abrl, idx, abrl, NULL);
     cp_register(acc, dbr);
 
     set_rw2write();
@@ -1449,7 +1450,7 @@ void cpu_6502_stx_zpy(){
     set_rw2read();
     access_memory();
 
-    alu(ALU_OP_ADD, dbr, idy, dbr, "00000000");
+    alu(ALU_OP_ADD, dbr, idy, dbr, NULL);
     cp_register(dbr, abrl);
     cp_register(zero, abrh);
     cp_register(idx, dbr);
@@ -1678,7 +1679,7 @@ void cpu_6502_sty_zpx (){
     set_rw2read();
     access_memory();
 
-    alu(ALU_OP_ADD, dbr, idx, dbr, "00000000");
+    alu(ALU_OP_ADD, dbr, idx, dbr, NULL);
     cp_register(dbr, abrl);
     cp_register(zero, abrh);
     cp_register(idy, dbr);
@@ -1987,10 +1988,9 @@ cycles: 6
 */
 void cpu_6502_ora_izx(){
     cycles = 6;
-    char localflags[] = "00000000";
 
     char *dbr = edata_izx();
-    alu(ALU_OP_OR, dbr, acc, acc, localflags);
+    alu(ALU_OP_OR, dbr, acc, acc, NULL);
 
     zsflagging(flags, acc);
 
@@ -2012,7 +2012,7 @@ void cpu_6502_ora_izy(){
     char localflags[] = "00000000";
 
     char *dbr = edata_izy();
-    alu(ALU_OP_OR, dbr, acc, acc, localflags);
+    alu(ALU_OP_OR, dbr, acc, acc, NULL);
 
     zsflagging(flags, acc);
 }
@@ -3230,7 +3230,7 @@ cycles: 2
 */
 void cpu_6502_asl_imp(){
     cycles = 2;
-
+    alu(ALU_OP_ASL, acc, NULL, acc, flags); 
 }
 
 
@@ -3246,7 +3246,21 @@ cycles: 5
 */
 void cpu_6502_asl_zp(){
     cycles = 5;
+    cp_register(pcl, abrl);
+    cp_register(pch, abrh);
+    set_rw2read();
+    access_memory();
 
+    cp_register(abrl, dbr);
+    cp_register(abrh, zero);
+    set_rw2read();
+    access_memory();
+
+    alu(ALU_OP_ASL, dbr, NULL, dbr, flags);
+    
+    set_rw2write();
+    access_memory();
+    inc_pc();
 }
 
 
@@ -3262,7 +3276,23 @@ cycles: 6
 */
 void cpu_6502_asl_zpx (){
     cycles = 6;
+    cp_register(pcl, abrl);
+    cp_register(pch, abrh);
+    set_rw2read();
+    access_memory();
 
+    alu(ALU_OP_ADD, dbr, idx, dbr, NULL);
+    cp_register(abrl, dbr);
+    cp_register(abrh, zero);
+
+    set_rw2read();
+    access_memory();
+
+    alu(ALU_OP_ASL, dbr, NULL, dbr, flags);
+    
+    set_rw2write();
+    access_memory();
+    inc_pc();
 }
 
 
@@ -3278,7 +3308,32 @@ cycles: 6
 */
 void cpu_6502_asl_abs(){
     cycles = 6;
+    char low[] = "00000000";
+    char high[] = "00000000";
 
+    cp_register(pcl, abrl);
+    cp_register(pch, abrh);
+    set_rw2read();
+    access_memory();
+    cp_register(dbr, low);
+
+    inc_pc();
+    cp_register(pcl, abrl);
+    cp_register(pch, abrh);
+    set_rw2read();
+    access_memory();
+    cp_register(dbr, high);
+
+    cp_register(low, abrl);
+    cp_register(high, abrh);
+    set_rw2read();
+    access_memory();
+
+    alu(ALU_OP_ASL, dbr, NULL, dbr, flags);
+
+    set_rw2write();
+    access_memory();
+    inc_pc();
 }
 
 
@@ -3292,9 +3347,38 @@ mnemonic: ASL abs,X
 bytes: 3
 cycles: 7
 */
-void cpu_6502_asl_abx (){
+void cpu_6502_asl_abx(){
     cycles = 7;
+    char low[] = "00000000";
+    char high[] = "00000000";
+    char localflags[] = "00000000";
 
+    cp_register(pcl, abrl);
+    cp_register(pch, abrh);
+    set_rw2read();
+    access_memory();
+    cp_register(dbr, low);
+
+    inc_pc();
+    cp_register(pcl, abrl);
+    cp_register(pch, abrh);
+    set_rw2read();
+    access_memory();
+    cp_register(dbr, high);
+
+    alu(ALU_OP_ADD, low, idx, low, localflags);
+    alu(ALU_OP_ADD_WITH_CARRY, high, zero, high, localflags);
+
+    cp_register(low, abrl);
+    cp_register(high, abrh);
+    set_rw2read();
+    access_memory();
+
+    alu(ALU_OP_ASL, dbr, NULL, dbr, flags);
+
+    set_rw2write();
+    access_memory();
+    inc_pc();
 }
 
 
