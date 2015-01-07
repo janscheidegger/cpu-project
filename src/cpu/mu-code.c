@@ -3215,7 +3215,6 @@ void cpu_6502_iny_imp(){
     cycles = 2;
     inc_register(idy);
     zsflagging(flags, idy);
-
 }
 
 
