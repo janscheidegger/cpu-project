@@ -329,7 +329,9 @@ cycles: 7
 void cpu_6502_brk_imp(){
     cycles = 7;
     setIRQflag(flags);
-    //TODO: DODO
+    push1(pcl);
+    push1(pch);
+    inc_pc();
 }
 
 
@@ -2769,13 +2771,14 @@ cycles: 2
 */
 void cpu_6502_cmp_imm(){
     cycles = 2;
+    char temp[] = "00000000";
     cp_register(pcl, abrl);
     cp_register(pch, abrh);
 
     set_rw2read();
     access_memory();
 
-    alu(ALU_OP_SUB,acc,dbr,acc,flags);
+    alu(ALU_OP_SUB,acc,dbr,temp,flags);
     inc_pc();
 }
 
@@ -2794,7 +2797,7 @@ cycles: 3
 void cpu_6502_cmp_zp(){
 
     cycles = 3;
-    char zero[]="00000000";
+    char temp[]= "00000000";
     cp_register(pcl, abrl);
     cp_register(pch, abrh);
 
@@ -2807,7 +2810,7 @@ void cpu_6502_cmp_zp(){
     set_rw2read();
     access_memory();
 
-    alu(ALU_OP_SUB,acc,dbr,acc,flags);
+    alu(ALU_OP_SUB,acc,dbr,temp,flags);
     inc_pc();
 }
 
@@ -2824,8 +2827,21 @@ cycles: 4
 */
 void cpu_6502_cmp_zpx (){
     cycles = 4;
+    char temp[] = "00000000";
+    cp_register(pcl, abrl);
+    cp_register(pch, abrh);
+    set_rw2read();
+    access_memory();
 
+    alu(ALU_OP_ADD, dbr, idx, dbr, NULL);
 
+    cp_register(dbr, abrl);
+    cp_register(zero, abrh);
+    set_rw2read();
+    access_memory();
+
+    alu(ALU_OP_SUB, acc, dbr, temp, flags);
+    inc_pc();
 }
 
 
@@ -2925,8 +2941,15 @@ cycles: 2
 */
 void cpu_6502_cpx_imm(){
     cycles = 2;
+    char temp[] = "00000000";
+    cp_register(pcl, abrl);
+    cp_register(pch, abrh);
 
+    set_rw2read();
+    access_memory();
 
+    alu(ALU_OP_SUB,dbr,acc,temp,flags);
+    inc_pc();
 }
 
 
@@ -2942,6 +2965,22 @@ cycles: 3
 */
 void cpu_6502_cpx_zp(){
     cycles = 3;
+    char zero[]="00000000";
+    char temp[] = "00000000";
+    cp_register(pcl, abrl);
+    cp_register(pch, abrh);
+
+    set_rw2read();
+    access_memory();
+
+    cp_register(dbr, abrl);
+    cp_register(zero, abrh);
+
+    set_rw2read();
+    access_memory();
+
+    alu(ALU_OP_SUB,idx,dbr,temp,flags);
+    inc_pc();
 
 
 }
@@ -3103,6 +3142,8 @@ cycles: 2
 */
 void cpu_6502_dey_imp(){
     cycles = 2;
+    dec_register(idy);
+    zsflagging(flags, idy);
 
 }
 
@@ -3130,11 +3171,12 @@ void cpu_6502_inc_zp(){
     access_memory();
 
     inc_register(dbr);
+    zsflagging(flags, dbr);
+
     set_rw2write();
     access_memory();
 
     inc_pc();
-
 }
 
 
@@ -3150,6 +3192,25 @@ cycles: 6
 */
 void cpu_6502_inc_zpx (){
     cycles = 6;
+    cp_register(pcl, abrl);
+    cp_register(pch, abrh);
+    set_rw2read();
+    access_memory();
+
+    alu(ALU_OP_ADD, dbr, idx, dbr, NULL);
+
+    cp_register(dbr, abrl);
+    cp_register(zero, abrh);
+    set_rw2read();
+    access_memory();
+
+    inc_register(dbr);
+    zsflagging(flags, dbr);
+
+    set_rw2write();
+    access_memory();
+
+    inc_pc();
 }
 
 
@@ -3198,6 +3259,7 @@ cycles: 2
 void cpu_6502_inx_imp(){
     cycles = 2;
     inc_register(idx);
+    zsflagging(flags, idx);
 }
 
 
